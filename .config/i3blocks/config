@@ -1,0 +1,16 @@
+separator=false
+
+[iface]
+command=/usr/libexec/i3blocks/iface
+label=
+interval=10
+
+[ram]
+label=   
+command=/usr/libexec/i3blocks/memory | grep -E -o '[0-9].[0-9]?G'
+interval=30
+
+[time]
+label=   
+command=date '+%a, %d %b %H:%M'
+interval=5

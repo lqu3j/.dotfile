@@ -106,6 +106,7 @@ alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
 alias rsync="rsync -avcPz"
 alias ssh="ssh -A"
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# export GOPATH=$HOME/programming/go
-# export PATH=$PATH:/home/woocat/.local/bin:/home/woocat/programming/go/bin
+
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi
