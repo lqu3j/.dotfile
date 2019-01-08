@@ -1,0 +1,4 @@
+rofi.theme: /usr/share/rofi/themes//Pop-Dark.rasi
+rofi.modi: drun,ssh,window
+rofi.window-format: {c}		{t}
+rofi.font: Source Code Pro for Powerline 15

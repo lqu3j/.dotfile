@@ -1,0 +1,13 @@
+.emacs.d/projectile.cache
+.config/nvim/.netrwhist
+.config/nvim/plugged
+.emacs.d/.historian
+.emacs.d/.smex-items
+.emacs.d/custom.el
+.emacs.d/ditaa0_9.jar
+.emacs.d/elpa*
+.emacs.d/org-clock-save.el
+.emacs.d/plantuml.jar
+.emacs.d/projectile-bookmarks.eld
+.emacs.d/recentf
+*uuid*

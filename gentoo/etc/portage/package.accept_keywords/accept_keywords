@@ -1,0 +1,18 @@
+# required by bspwm (argument)
+x11-wm/bspwm ~amd64
+# required by numix-gtk-theme (argument)
+x11-themes/numix-gtk-theme ~amd64
+# required by shadowsocks-libev (argument)
+net-proxy/shadowsocks-libev ~amd64
+# required by net-proxy/shadowsocks-libev-3.2.0::gentoo
+# required by shadowsocks-libev (argument)
+net-libs/libbloom ~amd64
+# required by net-libs/libcorkipset-1.1.1.20150311_p8::gentoo
+# required by net-proxy/shadowsocks-libev-3.2.0::gentoo
+# required by shadowsocks-libev (argument)
+net-libs/libcork ~amd64
+# required by net-proxy/shadowsocks-libev-3.2.0::gentoo
+# required by shadowsocks-libev (argument)
+net-libs/libcorkipset ~amd64
+# required by stow (argument)
+app-admin/stow ~amd64
