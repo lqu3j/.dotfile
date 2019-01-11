@@ -16,6 +16,7 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'scrooloose/syntastic'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
 
 " Initialize plugin system
 call plug#end()
@@ -44,6 +45,10 @@ let g:syntastic_enable_signs = 0
 let g:airline_theme='base16_monokai'
 let g:airline_powerline_fonts = 1
 
-set t_Co=256
+hi link diffRemoved DiffDelete
+hi link diffAdded DiffAdd
 syntax on
 set nu
+set background=dark
+colorscheme solarized
+let g:solarized_diffmode="high"
