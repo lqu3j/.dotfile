@@ -182,7 +182,9 @@ Toggles between: “all lower”, “Init Caps”, “ALL CAPS”."
 (global-set-key (kbd "C-c s s") 'counsel-ag)
 (global-set-key (kbd "C-x d") 'dired-jump)
 (global-set-key (kbd "C-x b") 'counsel-ibuffer)
-(global-set-key (kbd "C-x r") 'counsel-recentf)
+(global-set-key (kbd "C-x C-r") 'counsel-recentf)
+(setq company-go-gocode-args '("-builtin" "-unimported-packages"))
+(setq flycheck-go-build-install-deps t)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

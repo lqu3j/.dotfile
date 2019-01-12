@@ -108,5 +108,7 @@ alias rsync="rsync -avcPz"
 alias ssh="ssh -A"
 
 if [[ "$SSH_AGENT_PID" == "" ]]; then
-    eval "$(<~/.ssh-agent-thing)"
+	eval "$(<~/.ssh-agent-thing)"
 fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
