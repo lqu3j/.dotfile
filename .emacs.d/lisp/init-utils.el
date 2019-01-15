@@ -161,4 +161,38 @@ This is useful when followed by an immediate kill."
 	  (load-theme theme t)))
   (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
 
+
+;;----------------------------------------------------------------------------
+;; Newline and indent on appropriate pairs
+;;----------------------------------------------------------------------------
+(defvar gp/sp/post-command-count 0
+  "Number of commands called after a pair has been opened.")
+
+(defun gp/sp/create-newline-and-enter-sexp ()
+  "Open a new brace or bracket expression, with relevant newlines and indent. "
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun gp/sp/release-newline-post-command ()
+  "Remove the hook and reset the post-command count."
+  (remove-hook 'post-command-hook 'gp/sp/await-newline-post-command)
+  (setq gp/sp/post-command-count 0))
+
+(defun gp/sp/await-newline-post-command ()
+  "If command is newline, indent and enter sexp."
+  (if (> gp/sp/post-command-count 1)
+      (gp/sp/release-newline-post-command)
+    (progn
+      (setq gp/sp/post-command-count (+ gp/sp/post-command-count 1))
+      (when (memq this-command
+                  '(newline newline-and-indent reindent-then-newline-and-indent))
+        (gp/sp/release-newline-post-command)
+        (gp/sp/create-newline-and-enter-sexp)))))
+
+(defun gp/sp/await-newline (id action context)
+  (when (eq action 'insert)
+    (add-hook 'post-command-hook 'gp/sp/await-newline-post-command)))
+
 (provide 'init-utils)

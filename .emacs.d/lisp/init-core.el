@@ -39,19 +39,25 @@
 	    (rainbow-delimiters-mode)
 	    (smartparens-mode)
 	    (hungry-delete-mode)
+            (setq-default indent-tabs-mode nil)
+            (setq tab-width 4)
+            (defvaralias 'c-basic-offset 'tab-width)
+            (defvaralias 'cperl-indent-level 'tab-width)
+            (defvaralias 'default-tab-width 'tab-width)
+
 	    ))
 ;; setting modeline without box
 (add-hook 'emacs-startup-hook
-	  (lambda()
-	    (set-face-attribute 'mode-line nil
-				:box nil
-				:overline nil
-				:underline nil)
-	    (set-face-attribute 'mode-line-inactive nil
-				:box nil
-				:overline nil
-				:underline nil)
-	    ))
+	      (lambda()
+	        (set-face-attribute 'mode-line nil
+				                :box nil
+				                :overline nil
+				                :underline nil)
+	        (set-face-attribute 'mode-line-inactive nil
+				                :box nil
+				                :overline nil
+				                :underline nil)
+	        ))
 ;; start anzu-mode globally
 (add-hook 'after-init-hook 'global-anzu-mode)
 ;; start recentf-mode globally
@@ -81,7 +87,13 @@
 (after-load 'eldoc
   (diminish 'eldoc-mode))
 (after-load 'smartparens
-  (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil))
+  (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil)
+  (sp-with-modes '(go-mode)
+    (sp-local-pair "(" nil :post-handlers '(:add gp/sp/await-newline))
+    (sp-local-pair "{" nil :post-handlers '(:add gp/sp/await-newline))
+    (sp-local-pair "[" nil :post-handlers '(:add gp/sp/await-newline)))
+  (set-face-attribute 'sp-pair-overlay-face nil
+                      :background "default"))
 (after-load 'exec-path-from-shell
   (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "GOPATH" "HUGO_BASE_DIR"))
     (add-to-list 'exec-path-from-shell-variables var)))
@@ -106,7 +118,6 @@
 (setq-default projectile-mode-line-prefix " Proj")
 (after-load 'projectile
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 ;;---------------------------------------------------------------
 ;; keybindings
 ;;---------------------------------------------------------------
