@@ -10,4 +10,5 @@
 .emacs.d/plantuml.jar
 .emacs.d/projectile-bookmarks.eld
 .emacs.d/recentf
+.emacs.d/.mc-lists.el
 *uuid*

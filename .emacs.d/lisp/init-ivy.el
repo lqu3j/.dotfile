@@ -1,3 +1,9 @@
+;; Use smex to handle M-x
+(when (maybe-require-package 'smex)
+  ;; Change path for ~/.smex-items
+  (setq-default smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+  (global-set-key [remap execute-extended-command] 'smex))
+
 ;;; -*- lexical-binding: t -*-
 (when (maybe-require-package 'ivy)
   (add-hook 'after-init-hook 'ivy-mode)
@@ -79,5 +85,8 @@ instead."
 (when (maybe-require-package 'ivy-xref)
   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
+(global-set-key (kbd "C-c s s") 'counsel-ag)
+(global-set-key (kbd "C-x b") 'counsel-ibuffer)
+(global-set-key (kbd "C-x C-r") 'counsel-recentf)
 
 (provide 'init-ivy)
