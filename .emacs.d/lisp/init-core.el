@@ -29,7 +29,8 @@
 (maybe-require-package 'projectile)
 ;; Group ibuffer's list by projectile root
 (maybe-require-package 'ibuffer-projectile)
-
+;; Diminished modes are minor modes with no modeline display
+(maybe-require-package 'diminish)
 ;;-----------------------------------------------------------------
 ;;Setting  hook
 ;;-----------------------------------------------------------------
