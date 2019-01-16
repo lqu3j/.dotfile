@@ -89,7 +89,7 @@
   (diminish 'eldoc-mode))
 (after-load 'smartparens
   (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil)
-  (sp-with-modes '(go-mode)
+  (sp-with-modes '(prog-mode)
     (sp-local-pair "(" nil :post-handlers '(:add gp/sp/await-newline))
     (sp-local-pair "{" nil :post-handlers '(:add gp/sp/await-newline))
     (sp-local-pair "[" nil :post-handlers '(:add gp/sp/await-newline)))

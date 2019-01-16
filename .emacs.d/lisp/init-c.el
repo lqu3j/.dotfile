@@ -7,7 +7,7 @@
             ))
 (after-load 'ggtags
   (set-face-attribute 'ggtags-highlight nil
-                      :underline nil))
-
-
+                      :underline nil)
+  (define-key ggtags-navigation-map (kbd "M-o") nil)
+  )
 (provide 'init-c)
