@@ -1,6 +1,6 @@
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
-
+(maybe-require-package 'ox-hugo)
 (maybe-require-package 'org-cliplink)
 
 (define-key global-map (kbd "C-c l") 'org-store-link)

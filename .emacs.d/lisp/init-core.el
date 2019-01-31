@@ -87,6 +87,10 @@
   (diminish 'smartparens-mode))
 (after-load 'eldoc
   (diminish 'eldoc-mode))
+(after-load 'projectile
+  (diminish 'projectile-mode))
+(after-load 'flycheck
+  (diminish 'flycheck-mode))
 (after-load 'smartparens
   (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil)
   (sp-with-modes '(prog-mode)

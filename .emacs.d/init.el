@@ -39,4 +39,6 @@
 (require 'init-org)
 (require 'init-whitespace)
 (require 'init-c)
+(require 'init-rust)
+(require 'init-racket)
 (provide 'init)
