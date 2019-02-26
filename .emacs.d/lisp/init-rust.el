@@ -1,0 +1,13 @@
+(maybe-require-package 'rust-mode)
+(maybe-require-package 'racer)
+(maybe-require-package 'flycheck-rust)
+(maybe-require-package 'racer)
+
+(setq rust-format-on-save t)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+(provide 'init-rust)

@@ -6,3 +6,5 @@ export GOPATH=$HOME/workspace/programming/go
 export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 export PATH=$PATH:$GOPATH/bin:~/.local/bin:~/.fzf/bin/:$HOME/.cargo/bin
+export SCALA_HOME=/usr/share/scala-2.12
+export JAVA_HOME=/etc/java-config-2/current-system-vm

@@ -379,5 +379,6 @@ typical word processor."
      (sql . nil)
      (sqlite . t))))
 
+(setq org-agenda-files (list "~/workspace/work/work.org"))
 
 (provide 'init-org)

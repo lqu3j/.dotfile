@@ -41,4 +41,6 @@
 (require 'init-c)
 (require 'init-rust)
 (require 'init-racket)
+(require 'init-python)
+(require 'init-javascript)
 (provide 'init)

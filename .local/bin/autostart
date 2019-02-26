@@ -13,9 +13,17 @@ if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent | grep -v echo> ~/.ssh-agent-thing
 fi
 
+# kcptun_server and udp2raw_amd64 server
+# nohup ./kcptun_server  -t ":2443" -l ":4000" -mode fast3 -nocomp -sockbuf 16777217 -dscp 46  > kcptun.log 2>&1 &
+# nohup ./udp2raw_amd64 -s -l0.0.0.0:4096 -r 127.0.0.1:4000    -k "520?YES:no" --raw-mode faketcp -a > udp2raw.log 2>&1 &
+
+# start udp2raw_amd64, for fake tcp
+# if ! pgrep -u "$USER" kcptun_client > /dev/null; then
+#     $HOME/.local/bin/udp2raw_amd64 -c -l0.0.0.0:3333 -r104.225.147.158:4096 -k "520?YES:no" --raw-mode faketcp > ~/.udp2raw_amd4.log 2>&1 &
+# fi
 # start kcptun_client, to accelerate to shadowsocks
 if ! pgrep -u "$USER" kcptun_client > /dev/null; then
-    $HOME/.local/bin/kcptun_client -r "104.225.147.158:4000" -l ":8388" --rcvwnd 4096 --sndwnd 4096  --mode  fast3 --quiet > /dev/null 2>&1 &
+    $HOME/.local/bin/kcptun_client -r "104.225.147.158:4000" -l ":8388" -mode fast3 -nocomp -autoexpire 500 -sockbuf 16777217 -dscp 46 > ~/.kcptun_log.txt 2>&1 &
 fi
 
 # start compton

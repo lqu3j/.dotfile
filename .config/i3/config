@@ -167,7 +167,6 @@ bindsym $mod+Shift+n scratchpad show
 default_border pixel 3
 default_floating_border normal
 popup_during_fullscreen leave_fullscreen
-default_orientation vertical
 
 gaps inner 10
 gaps outer 5
