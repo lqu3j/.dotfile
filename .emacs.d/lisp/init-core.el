@@ -31,6 +31,7 @@
 (maybe-require-package 'ibuffer-projectile)
 ;; Diminished modes are minor modes with no modeline display
 (maybe-require-package 'diminish)
+(maybe-require-package 'crux)
 ;;-----------------------------------------------------------------
 ;;Setting  hook
 ;;-----------------------------------------------------------------
@@ -114,15 +115,18 @@
  recentf-max-saved-items 1000
  recentf-exclude '("/tmp/" "/ssh:"))
 (setq-default custom-enabled-themes '(monokai))
-(setq monokai-height-minus-1 1.0
-      monokai-height-plus-1 1.0
-      monokai-height-plus-2 1.0
-      monokai-height-plus-3 1.0
-      monokai-height-plus-4 1.0)
+(setq monokai-height-minus-1 0.8
+      monokai-height-plus-1 1.1
+      monokai-height-plus-2 1.15
+      monokai-height-plus-3 1.2
+      monokai-height-plus-4 1.3)
+
 (setq-default dimmer-fraction 0.15)
 (setq-default projectile-mode-line-prefix " Proj")
 (after-load 'projectile
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+
 ;;---------------------------------------------------------------
 ;; keybindings
 ;;---------------------------------------------------------------
@@ -137,11 +141,16 @@
 (global-set-key (kbd "M-c") 'toggle-letter-case)
 (global-set-key [remap query-replace] 'anzu-query-replace)
 (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
+(global-set-key (kbd "C-c d") 'counsel-imenu)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (after-load 'isearch
   (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
   (when (fboundp 'isearch-occur)
     (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur)))
 (define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
 (define-key isearch-mode-map [(control return)] 'sanityinc/isearch-exit-other-end)
+(global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
+(global-set-key (kbd "C-c o") #'crux-open-with)
+(global-set-key [(shift return)] #'crux-smart-open-line)
 
 (provide 'init-core)

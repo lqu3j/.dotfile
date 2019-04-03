@@ -106,10 +106,12 @@ alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
 alias rsync="rsync -avcPz"
 alias ssh="ssh -A"
+alias vim="nvim"
 
 
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
 	eval "$(<~/.ssh-agent-thing)"
 #fi
+cd /home/woocat/workspace/programming/go/src/git.wannafilm.com/luoxin
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
