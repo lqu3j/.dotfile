@@ -21,8 +21,8 @@
 (maybe-require-package 'anzu)
 ;; Get environment variables such as $PATH from the shell
 (maybe-require-package 'exec-path-from-shell)
-;; monokai-theme
-(maybe-require-package 'monokai-theme)
+;; gruvbox-theme
+(maybe-require-package 'gruvbox-theme)
 ;; visually highlight the selected buffer
 (maybe-require-package 'dimmer)
 ;; Manage and navigate projects in Emacs easily
@@ -32,22 +32,25 @@
 ;; Diminished modes are minor modes with no modeline display
 (maybe-require-package 'diminish)
 (maybe-require-package 'crux)
+(maybe-require-package 'yasnippet)
+(require 'yasnippet)
+(yas-reload-all)
 ;;-----------------------------------------------------------------
 ;;Setting  hook
 ;;-----------------------------------------------------------------
 ;; startup rainbow-delimiters, smartparens, hungre-delete mode after prog mode start
 (add-hook 'prog-mode-hook
-	  (lambda()
-	    (rainbow-delimiters-mode)
-	    (smartparens-mode)
-	    (hungry-delete-mode)
+	      (lambda()
+	        (rainbow-delimiters-mode)
+	        (smartparens-mode)
+	        (hungry-delete-mode)
             (setq-default indent-tabs-mode nil)
             (setq tab-width 4)
             (defvaralias 'c-basic-offset 'tab-width)
             (defvaralias 'cperl-indent-level 'tab-width)
             (defvaralias 'default-tab-width 'tab-width)
-
-	    ))
+            (yas-minor-mode)
+            ))
 ;; setting modeline without box
 (add-hook 'emacs-startup-hook
 	      (lambda()
@@ -92,6 +95,8 @@
   (diminish 'projectile-mode))
 (after-load 'flycheck
   (diminish 'flycheck-mode))
+(after-load 'yas-minor-mode
+  (diminish 'yas-minor-mode))
 (after-load 'smartparens
   (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil)
   (sp-with-modes '(prog-mode)
@@ -114,7 +119,7 @@
 (setq-default
  recentf-max-saved-items 1000
  recentf-exclude '("/tmp/" "/ssh:"))
-(setq-default custom-enabled-themes '(monokai))
+(setq-default custom-enabled-themes '(gruvbox-dark-medium))
 (setq monokai-height-minus-1 0.8
       monokai-height-plus-1 1.1
       monokai-height-plus-2 1.15
