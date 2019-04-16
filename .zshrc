@@ -101,13 +101,11 @@ zstyle ':completion::complete:*' use-cache 1
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 alias cdgtd="cd ~/workspace/gtd"
-alias tattach="tmux a -t"
+alias tattach="tmux attach"
 alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
-alias rsync="rsync -avcPz"
-alias ssh="ssh -A"
+alias rsync="proxychains -q rsync -avcPz"
 alias vim="nvim"
-
 
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
 	eval "$(<~/.ssh-agent-thing)"
@@ -115,3 +113,14 @@ alias vim="nvim"
 cd /home/woocat/workspace/programming/go/src/git.wannafilm.com/luoxin
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+ssh() {
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux: server" ]; then
+        tmux rename-window "$(echo $* | awk '{print $NF}')"
+        command proxychains -q ssh -A "$@"
+        tmux set-window-option automatic-rename "on" 1>/dev/null
+    else
+        command proxychains -q ssh -A "$@"
+    fi
+}
+

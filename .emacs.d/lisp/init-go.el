@@ -20,7 +20,7 @@
 ;; setting go-eldoc and comapny-backends, of course start up flycheck
 (add-hook 'go-mode-hook
 	      (lambda()
-	        (set (make-local-variable 'company-backends) '(company-yasnippet company-go))
+	        (set (make-local-variable 'company-backends) '(company-go))
             (set (make-local-variable 'flycheck-display-errors-delay) 0.5)
 	        (go-eldoc-setup)
 	        (flycheck-mode)

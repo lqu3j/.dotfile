@@ -21,8 +21,8 @@
 (maybe-require-package 'anzu)
 ;; Get environment variables such as $PATH from the shell
 (maybe-require-package 'exec-path-from-shell)
-;; gruvbox-theme
-(maybe-require-package 'gruvbox-theme)
+;; zenburn-theme
+(maybe-require-package 'monokai-theme)
 ;; visually highlight the selected buffer
 (maybe-require-package 'dimmer)
 ;; Manage and navigate projects in Emacs easily
@@ -119,12 +119,12 @@
 (setq-default
  recentf-max-saved-items 1000
  recentf-exclude '("/tmp/" "/ssh:"))
-(setq-default custom-enabled-themes '(gruvbox-dark-medium))
-(setq monokai-height-minus-1 0.8
-      monokai-height-plus-1 1.1
-      monokai-height-plus-2 1.15
-      monokai-height-plus-3 1.2
-      monokai-height-plus-4 1.3)
+(setq-default custom-enabled-themes '(monokai))
+(setq monokai-height-minus-1 1.0
+      monokai-height-plus-1 1.0
+      monokai-height-plus-2 1.0
+      monokai-height-plus-3 1.0
+      monokai-height-plus-4 1.0)
 
 (setq-default dimmer-fraction 0.15)
 (setq-default projectile-mode-line-prefix " Proj")
