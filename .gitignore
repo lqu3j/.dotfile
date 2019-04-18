@@ -13,3 +13,7 @@
 .emacs.d/.mc-lists.el
 .emacs.d/anaconda-mode/
 *uuid*
+.emacs.d/.lsp-session-v1
+.emacs.d/transient/*
+.local/share/fonts/Robot Mono/*
+.local/share/fonts/monaco.ttf
