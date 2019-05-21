@@ -5,9 +5,9 @@
 	helper = store
 [url "gogs@git.algor.tech:"]
 	insteadOf = https://git.algor.tech/
-[url "git@git.wannafilm.com:"]
-	insteadOf = https://git.wannafilm.com
-[http]
-	proxy = socks5://127.0.0.1:1080
-[https]
-	proxy = socks5://127.0.0.1:1080
+#[url "git@git.wannafilm.com:"]
+#	insteadOf = https://git.wannafilm.com
+#[http]
+#	proxy = socks5://127.0.0.1:1080
+#[https]
+#	proxy = socks5://127.0.0.1:1080

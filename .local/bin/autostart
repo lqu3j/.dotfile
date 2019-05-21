@@ -22,9 +22,9 @@ fi
 #     $HOME/.local/bin/udp2raw_amd64 -c -l0.0.0.0:3333 -r104.225.147.158:4096 -k "520?YES:no" --raw-mode faketcp > ~/.udp2raw_amd4.log 2>&1 &
 # fi
 # start kcptun_client, to accelerate to shadowsocks
-if ! pgrep -u "$USER" kcptun_client > /dev/null; then
-    $HOME/.local/bin/kcptun_client -r "104.225.147.158:4000" -l ":8388" -mode fast3 -nocomp -autoexpire 500 -sockbuf 16777217 -dscp 46 > ~/.kcptun_log.txt 2>&1 &
-fi
+# if ! pgrep -u "$USER" kcptun_client > /dev/null; then
+#     $HOME/.local/bin/kcptun_client -r "104.225.147.158:4000" -l ":8388" -mode fast3 -nocomp -autoexpire 500 -sockbuf 16777217 -dscp 46 > ~/.kcptun_log.txt 2>&1 &
+# fi
 
 # start compton
 if ! pgrep -u "$USER" compton > /dev/null; then

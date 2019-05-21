@@ -6,6 +6,7 @@
 (maybe-require-package 'go-eldoc)
 (maybe-require-package 'flycheck)
 (maybe-require-package 'go-snippets)
+(maybe-require-package 'go-rename)
 ;;----------------------------------------------------------------
 ;; basic setting
 ;;----------------------------------------------------------------
@@ -40,6 +41,9 @@
 ;; keybindings
 ;;---------------------------------------------------------------
 (after-load 'go-mode
-  (define-key go-mode-map (kbd "M-.") 'godef-jump))
+  (define-key go-mode-map (kbd "M-.") 'godef-jump)
+  (define-key go-mode-map (kbd "C-c g c") 'go-guru-callers)
+  (define-key go-mode-map (kbd "C-c g r") 'go-rename)
+  )
 
 (provide 'init-go)

@@ -110,11 +110,21 @@ alias vim="nvim"
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
 	eval "$(<~/.ssh-agent-thing)"
 #fi
-cd /home/woocat/workspace/programming/go/src/git.wannafilm.com/luoxin
+#cd /home/woocat/workspace/programming/go/src/git.wannafilm.com/luoxin
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ssh() {
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux: server" ]; then
+        tmux rename-window "$(echo $* | awk '{print $NF}')"
+        command ssh -A "$@"
+        tmux set-window-option automatic-rename "on" 1>/dev/null
+    else
+        command ssh -A "$@"
+    fi
+}
+
+pssh() {
     if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux: server" ]; then
         tmux rename-window "$(echo $* | awk '{print $NF}')"
         command proxychains -q ssh -A "$@"
@@ -124,3 +134,4 @@ ssh() {
     fi
 }
 
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

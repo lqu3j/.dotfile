@@ -49,7 +49,6 @@
             (defvaralias 'c-basic-offset 'tab-width)
             (defvaralias 'cperl-indent-level 'tab-width)
             (defvaralias 'default-tab-width 'tab-width)
-            (yas-minor-mode)
             ))
 ;; setting modeline without box
 (add-hook 'emacs-startup-hook
@@ -97,6 +96,8 @@
   (diminish 'flycheck-mode))
 (after-load 'yas-minor-mode
   (diminish 'yas-minor-mode))
+(after-load 'ggtags-mode
+  (diminish 'ggtags-mode))
 (after-load 'smartparens
   (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil)
   (sp-with-modes '(prog-mode)
@@ -115,7 +116,7 @@
 (set-frame-font "InconsolataGo Nerd Font 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-		    charset (font-spec :family "ZhunYuan" :size 18)))
+		            charset (font-spec :family "ZhunYuan" :size 18)))
 (setq-default
  recentf-max-saved-items 1000
  recentf-exclude '("/tmp/" "/ssh:"))
@@ -130,8 +131,26 @@
 (setq-default projectile-mode-line-prefix " Proj")
 (after-load 'projectile
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+(save-place-mode 1)
 
+(defun dired-dotfiles-toggle ()
+  "Show/hide dot-files"
+  (interactive)
+  (when (equal major-mode 'dired-mode)
+    (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
+	    (progn
+	      (set (make-local-variable 'dired-dotfiles-show-p) nil)
+	      (message "h")
+	      (dired-mark-files-regexp "^\\\.")
+	      (dired-do-kill-lines))
+	  (progn (revert-buffer) ; otherwise just revert to re-show
+	         (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
+(defun open-terminal-here ()
+  (interactive "@")
+  (shell-command (concat "xfce4-terminal --working-directory="
+                         (file-name-directory (or load-file-name buffer-file-name))
+                         " > /dev/null 2>&1 & disown") nil nil))
 ;;---------------------------------------------------------------
 ;; keybindings
 ;;---------------------------------------------------------------
@@ -157,5 +176,8 @@
 (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
 (global-set-key (kbd "C-c o") #'crux-open-with)
 (global-set-key [(shift return)] #'crux-smart-open-line)
+(global-set-key (kbd "C-c t") 'open-terminal-here)
 
+(after-load 'dired
+  (define-key dired-mode-map (kbd "h") 'dired-dotfiles-toggle))
 (provide 'init-core)
