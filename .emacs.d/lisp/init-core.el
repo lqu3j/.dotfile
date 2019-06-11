@@ -21,8 +21,8 @@
 (maybe-require-package 'anzu)
 ;; Get environment variables such as $PATH from the shell
 (maybe-require-package 'exec-path-from-shell)
-;; zenburn-theme
-(maybe-require-package 'monokai-theme)
+;; solarized-theme
+(maybe-require-package 'solarized-theme)
 ;; visually highlight the selected buffer
 (maybe-require-package 'dimmer)
 ;; Manage and navigate projects in Emacs easily
@@ -120,12 +120,25 @@
 (setq-default
  recentf-max-saved-items 1000
  recentf-exclude '("/tmp/" "/ssh:"))
-(setq-default custom-enabled-themes '(monokai))
-(setq monokai-height-minus-1 1.0
-      monokai-height-plus-1 1.0
-      monokai-height-plus-2 1.0
-      monokai-height-plus-3 1.0
-      monokai-height-plus-4 1.0)
+(setq-default custom-enabled-themes '(solarized-dark))
+;; Avoid all font-size changes
+(setq solarized-height-minus-1 1.0
+      solarized-height-plus-1 1.0
+      solarized-height-plus-2 1.0
+      solarized-height-plus-3 1.0
+      solarized-height-plus-4 1.0)
+;; Don't change the font for some headings and titles
+(setq solarized-use-variable-pitch nil)
+;; make the modeline high contrast
+(setq solarized-high-contrast-mode-line nil)
+;; Use less bolding
+(setq solarized-use-less-bold t)
+;; Use more italics
+(setq solarized-use-more-italic t)
+;; Use less colors for indicators such as git:gutter, flycheck and similar
+(setq solarized-emphasize-indicators nil)
+;; Don't change size of org-mode headlines (but keep other size-changes)
+(setq solarized-scale-org-headlines nil)
 
 (setq-default dimmer-fraction 0.15)
 (setq-default projectile-mode-line-prefix " Proj")

@@ -104,7 +104,7 @@ alias cdgtd="cd ~/workspace/gtd"
 alias tattach="tmux attach"
 alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
-alias rsync="proxychains -q rsync -avcPz"
+alias rsync="rsync -avcPz"
 alias vim="nvim"
 
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
