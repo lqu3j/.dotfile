@@ -17,3 +17,6 @@
 .emacs.d/transient/*
 .local/share/fonts/Robot Mono/*
 .local/share/fonts/monaco.ttf
+.config/xfce4/xfconf/
+.emacs.d/.cache/
+.emacs.d/places

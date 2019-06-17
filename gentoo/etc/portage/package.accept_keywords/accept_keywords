@@ -16,3 +16,29 @@ net-libs/libcork ~amd64
 net-libs/libcorkipset ~amd64
 # required by stow (argument)
 app-admin/stow ~amd64
+# required by x11-wm/bspwm-0.9.5::gentoo
+# required by bspwm (argument)
+x11-misc/sxhkd ~amd64
+
+app-misc/jq ~amd64
+
+# required by app-editors/neovim-9999::gentoo
+# required by =app-editors/neovim-9999 (argument)
+=dev-libs/msgpack-3.1.1 ~amd64
+# required by =app-editors/neovim-9999 (argument)
+=app-editors/neovim-9999 **
+# required by app-editors/neovim-9999::gentoo[tui]
+# required by =app-editors/neovim-9999 (argument)
+=dev-libs/libtermkey-0.22 ~amd64
+# required by app-editors/neovim-9999::gentoo[tui]
+# required by =app-editors/neovim-9999 (argument)
+=dev-libs/unibilium-2.0.0 ~amd64
+# required by app-editors/neovim-9999::gentoo[python]
+# required by =app-editors/neovim-9999 (argument)
+=dev-python/neovim-python-client-0.3.2 ~amd64
+# required by dev-python/neovim-python-client-0.3.2::gentoo
+# required by app-editors/neovim-9999::gentoo[python]
+# required by =app-editors/neovim-9999 (argument)
+=dev-python/msgpack-0.5.6 ~amd64
+
+=app-editors/visual-studio-code-1.33.1 ~amd64

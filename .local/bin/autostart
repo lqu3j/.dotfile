@@ -8,23 +8,20 @@ xset +fp /home/woocat/.local/share/fonts/ZhunYuan
 xset +fp /home/woocat/.local/share/fonts/Monofur\ for\ Powerline
 xset +fp /home/woocat/.local/share/fonts/Source\ Code\ Pro\ for\ Powerline
 
-# start ssh-agent 
+# start ssh-agent
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent | grep -v echo> ~/.ssh-agent-thing
 fi
 
-# kcptun_server and udp2raw_amd64 server
-# nohup ./kcptun_server  -t ":2443" -l ":4000" -mode fast3 -nocomp -sockbuf 16777217 -dscp 46  > kcptun.log 2>&1 &
-# nohup ./udp2raw_amd64 -s -l0.0.0.0:4096 -r 127.0.0.1:4000    -k "520?YES:no" --raw-mode faketcp -a > udp2raw.log 2>&1 &
+# ssh-add key
+ DIR=$HOME/.ssh/private
+ if [ -d "$DIR" ];then
+     for key in `ls $DIR`
+     do
+         ssh-add key
+     done
+ fi
 
-# start udp2raw_amd64, for fake tcp
-# if ! pgrep -u "$USER" kcptun_client > /dev/null; then
-#     $HOME/.local/bin/udp2raw_amd64 -c -l0.0.0.0:3333 -r104.225.147.158:4096 -k "520?YES:no" --raw-mode faketcp > ~/.udp2raw_amd4.log 2>&1 &
-# fi
-# start kcptun_client, to accelerate to shadowsocks
-# if ! pgrep -u "$USER" kcptun_client > /dev/null; then
-#     $HOME/.local/bin/kcptun_client -r "104.225.147.158:4000" -l ":8388" -mode fast3 -nocomp -autoexpire 500 -sockbuf 16777217 -dscp 46 > ~/.kcptun_log.txt 2>&1 &
-# fi
 
 # start compton
 if ! pgrep -u "$USER" compton > /dev/null; then
@@ -36,6 +33,6 @@ feh --bg-scale ~/pictures/simple.png
 
 # start fcitx
 if ! pgrep -u "$USER" fcitx > /dev/null; then
-   fcitx > /dev/null 2>&1 & 
+   fcitx > /dev/null 2>&1 &
 fi
 
