@@ -22,17 +22,21 @@ fi
      done
  fi
 
+HOST=`hostname`
+if [ "$HOST" = "lazzy-company-pc" ];then
+    xrandr --output DP1 --right-of HDMI2
+fi
 
-# start compton
-if ! pgrep -u "$USER" compton > /dev/null; then
-   compton > /dev/null 2>&1 &
+# start fcitx
+if ! pgrep -u "$USER" fcitx > /dev/null; then
+   fcitx > /dev/null 2>&1 &
 fi
 
 # setting wallpaper
 feh --bg-scale ~/pictures/simple.png
 
-# start fcitx
-if ! pgrep -u "$USER" fcitx > /dev/null; then
-   fcitx > /dev/null 2>&1 &
+# start compton
+if ! pgrep -u "$USER" compton > /dev/null; then
+   compton > /dev/null 2>&1 &
 fi
 
