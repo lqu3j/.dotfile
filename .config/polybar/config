@@ -73,6 +73,11 @@ inherit = bar/DP1
 monitor = ${env:MONITOR:HDMI2}
 tray-position = none
 
+[bar/DP-2]
+inherit = bar/DP1
+monitor = ${env:MONITOR:DP-2}
+modules-right = eth2 date
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
@@ -121,6 +126,15 @@ label-empty = %name%
 label-empty-foreground = ${colors.foreground-alt}
 label-empty-padding = 2
 
+
+[module/eth2]
+type = internal/network
+interface = enp6s0
+interval = 3.0
+
+label-connected =  %local_ip%    %downspeed:7%    %upspeed:7%
+
+format-disconnected =
 
 [module/eth]
 type = internal/network

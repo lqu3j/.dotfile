@@ -18,4 +18,9 @@ if [ "$HOST" = "lazzy-company-pc" ];then
     polybar HDMI2 > /dev/null 2>&1 &
 fi
 
+if [ "$HOST" = "lazzy-home-pc" ]; then
+    bspc monitor DP-2 -d       
+    polybar DP-2 > /dev/null 2>&1 &
+fi
+
 
