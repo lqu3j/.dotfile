@@ -3,8 +3,8 @@
 	email = lqu3qf@gmail.com
 [credential]
 	helper = store
-[url "gogs@git.algor.tech:"]
-	insteadOf = https://git.algor.tech/
+#[url "gogs@git.algor.tech:"]
+#	insteadOf = https://git.algor.tech/
 #[url "git@git.wannafilm.com:"]
 #	insteadOf = https://git.wannafilm.com
 #[http]
