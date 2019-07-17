@@ -12,14 +12,16 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'w0rp/ale'
-Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'easymotion/vim-easymotion'
 Plug 'yggdroot/indentline'
 Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'plasticboy/vim-markdown'
-
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'luochen1990/rainbow'
 call plug#end()
 
 " Maintainer: 
@@ -496,7 +498,6 @@ let g:airline_theme = "gruvbox"
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#max_list = 15
-call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
 " ale
 let g:ale_linters = {
@@ -536,3 +537,17 @@ let g:ctrlp_working_path_mode = 'rc'
 let g:ctrlp_show_hidden = 1
 let g:go_def_reuse_buffer = 1
 
+augroup gopkgs
+  autocmd!
+  autocmd FileType go command! -buffer Import  call fzf#run({'source': 'gopkgs -no-vendor', 'sink': 'GoImport', 'down': '30%'})
+augroup END
+
+"Uncomment to override defaults:
+let g:instant_markdown_slow = 1
+let g:instant_markdown_autostart = 0
+let g:instant_markdown_open_to_the_world = 1 
+let g:instant_markdown_allow_unsafe_content = 1
+let g:instant_markdown_allow_external_content = 0
+let g:instant_markdown_mathjax = 1
+
+let g:rainbow_active = 1
