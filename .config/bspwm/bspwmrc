@@ -19,8 +19,8 @@ if [ "$HOST" = "lazzy-company-pc" ];then
 fi
 
 if [ "$HOST" = "lazzy-home-pc" ]; then
-    bspc monitor DP-2 -d       
-    polybar DP-2 > /dev/null 2>&1 &
+    bspc monitor DP-0 -d       
+    polybar DP-0 > /dev/null 2>&1 &
 fi
 
 
