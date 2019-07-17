@@ -1,46 +1,144 @@
-;; -*- lexical-binding: t -*-
-;;(setq debug-on-error t)
+(package-initialize)
 
-;;; This file bootstraps the configuration, which is divided into
-;;; a number of other files.
+(setq package-archives '(("gnu-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+                         ("org-cn" . "http://mirrors.cloud.tencent.com/elpa/org/")
+                         ("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
 
-(let ((minver "24.4"))
-  (when (version< emacs-version minver)
-	(error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-(when (version< emacs-version "25.1")
-  (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
-
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(require 'init-benchmarking) ;; Measure startup time
-(defconst *spell-check-support-enabled* nil) ;; Enable with t if you prefer
-(defconst *is-a-mac* (eq system-type 'darwin))
-
-(let ((normal-gc-cons-threshold (* 20 1024 1024))
-      (init-gc-cons-threshold (* 128 1024 1024)))
-  (setq gc-cons-threshold init-gc-cons-threshold)
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
-;;----------------------------------------------------------------------------
-;; Bootstrap config
-;;----------------------------------------------------------------------------
+;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(require 'init-utils)
-(require 'init-elpa)      ;; Machinery for installing required packages
-(require 'init-core)
 
-;;----------------------------------------------------------------------------
-;; Load configs for specific features and modes
-;;----------------------------------------------------------------------------
-(require 'cl)
-(require 'init-ivy)
-(require 'init-go)
-(require 'init-company)
-(require 'init-git)
-(require 'init-org)
-(require 'init-whitespace)
-(require 'init-c)
-(require 'init-rust)
-(require 'init-racket)
-(require 'init-python)
-(require 'init-javascript)
-(provide 'init)
+;; set font
+(set-frame-font "InconsolataGo Nerd Font 16" nil t)
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+		    charset (font-spec :family "ZhunYuan" :size 16)))
+
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq inhibit-splash-screen t)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+
+(add-hook 'emacs-startup-hook
+	  (lambda()
+	    (set-face-attribute 'mode-line nil
+				:box nil
+				:overline nil
+				:underline nil)
+	    (set-face-attribute 'mode-line-inactive nil
+				:box nil
+				:overline nil
+				:underline nil)
+	    ))
+
+(recentf-mode)
+;; automate install use-pacakge
+(dolist (package '(use-package))
+  (unless (package-installed-p package)
+    (package-refresh-contents)
+    (package-install package)))
+
+(setq-default tab-width 4)
+
+(use-package expand-region
+  :ensure t
+  :bind(("C-=" . er/expand-region)))
+
+(use-package projectile
+  :ensure t
+  :config (projectile-mode))
+
+(use-package company
+  :ensure t
+  :hook (prog-mode . company-mode)
+  :config
+  (setq company-tooltip-limit 5
+	company-idle-delay 0.1
+	company-echo-delay 0
+	company-minimum-prefix-length 2)
+  :bind(:map company-active-map
+	     ("C-n" . company-select-next)
+	     ("C-p" . company-select-previous)
+	     ("C-w" . nil)))
+
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode)
+  (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil))
+
+(use-package hungry-delete
+  :ensure t
+  :hook (prog-mode . hungry-delete-mode))
+
+(use-package ace-window
+  :ensure t
+  :bind
+  ("M-o" . ace-window))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (setq exec-path-from-shell '("PATH" "GOPATH" "LANG" "LC_CTYPE")))
+
+(use-package smex
+  :ensure t
+  :config
+  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+  :bind ([remap execute-extended-command] . smex))
+
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t))
+
+(use-package counsel
+  :ensure t
+  :bind (("C-x b" . counsel-ibuffer)
+	 ("C-x C-r" . counsel-recentf)
+	 ("M-x" . counsel-M-x)))
+
+(use-package solarized-theme
+  :ensure
+  :config
+  ;; Don't change the font for some headings and titles
+  (setq solarized-use-variable-pitch nil)
+  ;; Make the modeline high contrast
+  (setq solarized-high-contrast-mode-line nil)
+  (load-theme 'solarized-dark t))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C->" . mc/mark-next-like-this)
+	 ("C-<" . mc/mark-previous-like-this)))
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
+
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred))
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+(use-package go-mode
+  :requires lsp-mode
+  :ensure t)
+
+
+(use-package yasnippet
+  :ensure t)
+
+(add-hook 'go-mode-hook 'lsp-deferred)
+(add-hook 'before-save-hook 'gofmt-before-save)
+	  
+

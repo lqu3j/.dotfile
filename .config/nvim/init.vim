@@ -120,19 +120,9 @@ let g:NERDSpaceDelims = 1
 let g:indentLine_enabled = 1
 
 set cursorline
-" hi clear CursorLine
-" hi CursorLine gui=underline cterm=underline ctermfg=None guifg=None
-
-" s{char}{char} to move to {char}{char}
-" nmap f <Plug>(easymotion-overwin-f)
-" nmap s <Plug>(easymotion-overwin-f2)
-" nmap w <Plug>(easymotion-overwin-w)
-" <Leader>f{char} to move to {char}
 nmap <C-x>; <Plug>(easymotion-bd-f)
 
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
-
-set diffopt=vertical,context:50
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -157,3 +147,4 @@ let g:instant_markdown_allow_external_content = 0
 let g:instant_markdown_mathjax = 1
 
 let g:rainbow_active = 1
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
