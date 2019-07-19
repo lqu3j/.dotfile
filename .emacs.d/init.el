@@ -11,7 +11,7 @@
 (set-frame-font "InconsolataGo Nerd Font 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-		    charset (font-spec :family "ZhunYuan" :size 16)))
+					charset (font-spec :family "ZhunYuan" :size 16)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
@@ -20,16 +20,16 @@
 
 
 (add-hook 'emacs-startup-hook
-	  (lambda()
-	    (set-face-attribute 'mode-line nil
-				:box nil
-				:overline nil
-				:underline nil)
-	    (set-face-attribute 'mode-line-inactive nil
-				:box nil
-				:overline nil
-				:underline nil)
-	    ))
+		  (lambda()
+			(set-face-attribute 'mode-line nil
+								:box nil
+								:overline nil
+								:underline nil)
+			(set-face-attribute 'mode-line-inactive nil
+								:box nil
+								:overline nil
+								:underline nil)
+			))
 
 (recentf-mode)
 ;; automate install use-pacakge
@@ -53,14 +53,13 @@
   :hook (prog-mode . company-mode)
   :config
   (setq company-tooltip-limit 5
-	company-idle-delay 0.1
-	company-echo-delay 0
-	company-minimum-prefix-length 2)
+		company-idle-delay 0.1
+		company-echo-delay 0
+		company-minimum-prefix-length 2)
   :bind(:map company-active-map
-	     ("C-n" . company-select-next)
-	     ("C-p" . company-select-previous)
-	     ("C-w" . nil)))
-
+			 ("C-n" . company-select-next)
+			 ("C-p" . company-select-previous)
+			 ("C-w" . nil)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -78,18 +77,15 @@
 
 (use-package ace-window
   :ensure t
-  :bind
-  ("M-o" . ace-window))
+  :bind ("M-o" . ace-window))
 
 (use-package exec-path-from-shell
   :ensure t
-  :config
-  (setq exec-path-from-shell '("PATH" "GOPATH" "LANG" "LC_CTYPE")))
+  :config (setq exec-path-from-shell '("PATH" "GOPATH" "LANG" "LC_CTYPE")))
 
 (use-package smex
   :ensure t
-  :config
-  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+  :config (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
   :bind ([remap execute-extended-command] . smex))
 
 (use-package ivy
@@ -101,8 +97,8 @@
 (use-package counsel
   :ensure t
   :bind (("C-x b" . counsel-ibuffer)
-	 ("C-x C-r" . counsel-recentf)
-	 ("M-x" . counsel-M-x)))
+		 ("C-x C-r" . counsel-recentf)
+		 ("M-x" . counsel-M-x)))
 
 (use-package solarized-theme
   :ensure
@@ -116,29 +112,48 @@
 (use-package multiple-cursors
   :ensure t
   :bind (("C->" . mc/mark-next-like-this)
-	 ("C-<" . mc/mark-previous-like-this)))
+		 ("C-<" . mc/mark-previous-like-this)))
 
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)))
+  :init
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  :bind (("C-x g" . magit-status))
+  :config (setq magit-ediff-dwim-show-on-hunks t))
+
+(use-package flycheck
+  :ensure t)
 
 (use-package lsp-mode
   :ensure t
-  :commands (lsp lsp-deferred))
+  :commands (lsp lsp-deferred)
+  :config (setq lsp-prefer-flymake nil))
 
 (use-package company-lsp
   :ensure t
   :commands company-lsp)
 
 (use-package go-mode
-  :requires lsp-mode
-  :ensure t)
-
+  :ensure t
+  :config (setq gofmt-command "goimports"))
+;; put hook out of use-package, because if put it use package is not working.
+(add-hook 'go-mode-hook
+	      (lambda()
+			(flycheck-mode)
+			(lsp-deferred)
+	        (add-to-list 'flycheck-disabled-checkers 'go-test)
+	        (add-to-list 'flycheck-disabled-checkers 'go-unconvert)
+	        (add-to-list 'flycheck-disabled-checkers 'go-errcheck)
+            (add-to-list 'flycheck-disabled-checkers 'go-staticcheck)
+			(add-to-list 'flycheck-disabled-checkers 'go-vet)
+	        (add-to-list 'flycheck-disabled-checkers 'go-gofmt)
+	        (add-to-list 'flycheck-disabled-checkers 'go-golint)
+	        ))
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 (use-package yasnippet
   :ensure t)
 
-(add-hook 'go-mode-hook 'lsp-deferred)
-(add-hook 'before-save-hook 'gofmt-before-save)
 	  
 
