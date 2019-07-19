@@ -58,6 +58,10 @@ set expandtab
 set shiftwidth=4
 set tabstop=4
 
+set updatetime=100
+
+set signcolumn=yes
+
 " Do not jump to forward
 nnoremap * *``
 
@@ -65,7 +69,7 @@ nnoremap <leader>fr :CtrlPMRUFiles<CR>
 nnoremap <leader>bb :CtrlPBuffer<CR>
 nnoremap <leader>ff :CtrlP<CR>
 nnoremap <leader>w :w<Cr>
-nnoremap <leader>q :q!<Cr>
+nnoremap <leader>q :bd<Cr>
 nnoremap <leader>d :GoDeclsDir<CR>
 autocmd FileType go nnoremap <buffer> <C-]> :GoDef<CR>
 
@@ -125,8 +129,8 @@ nmap <C-x>; <Plug>(easymotion-bd-f)
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
 
 autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+autocmd  FileType fzf set laststatus=0 noshowmode noruler norelativenumber
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
 set conceallevel=0
 
 let g:ctrlp_working_path_mode = 'rc'
@@ -135,16 +139,16 @@ let g:go_def_reuse_buffer = 1
 
 augroup gopkgs
   autocmd!
-  autocmd FileType go command! -buffer Import  call fzf#run({'source': 'gopkgs -no-vendor', 'sink': 'GoImport', 'down': '30%'})
+  autocmd FileType go command! -buffer Import  call fzf#run({'source': 'gopkgs -no-vendor', 'sink': 'GoImport'})
 augroup END
 
-"Uncomment to override defaults:
-let g:instant_markdown_slow = 1
-let g:instant_markdown_autostart = 0
-let g:instant_markdown_open_to_the_world = 1 
-let g:instant_markdown_allow_unsafe_content = 1
-let g:instant_markdown_allow_external_content = 0
-let g:instant_markdown_mathjax = 1
+let g:fzf_layout= { 'down': '30%' }
 
 let g:rainbow_active = 1
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+" Automatically change the current directory
+autocmd BufEnter * silent! lcd %:p:h
+set switchbuf+=useopen
+let g:instant_markdown_autostart = 1
+let g:vim_markdown_folding_disabled = 1
