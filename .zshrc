@@ -149,4 +149,10 @@ pssh() {
     fi
 }
 
+if [ -d ~/.zsh_plugins ]; then
+  for file in ~/.zsh_plugins/*.sh; do
+    source $file
+  done
+fi
+
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

@@ -20,3 +20,4 @@
 .config/xfce4/xfconf/
 .emacs.d/.cache/
 .emacs.d/places
+.emacs.d/auto-save-list/

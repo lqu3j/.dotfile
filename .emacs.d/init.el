@@ -46,7 +46,9 @@
 
 (use-package projectile
   :ensure t
-  :config (projectile-mode))
+  :config (projectile-mode)
+  :bind (:map projectile-mode-map
+			  ("C-c p" . projectile-command-map)))
 
 (use-package company
   :ensure t
@@ -100,6 +102,10 @@
 		 ("C-x C-r" . counsel-recentf)
 		 ("M-x" . counsel-M-x)))
 
+(use-package counsel-projectile
+  :ensure t
+  :config (counsel-projectile-mode))
+
 (use-package solarized-theme
   :ensure
   :config
@@ -122,6 +128,15 @@
   :bind (("C-x g" . magit-status))
   :config (setq magit-ediff-dwim-show-on-hunks t))
 
+(use-package avy
+  :ensure t)
+
+(use-package diminish
+  :ensure t)
+
+(use-package anzu
+  :ensure t)
+
 (use-package flycheck
   :ensure t)
 
@@ -133,7 +148,6 @@
 (use-package company-lsp
   :ensure t
   :commands company-lsp)
-
 (use-package go-mode
   :ensure t
   :config (setq gofmt-command "goimports"))
@@ -152,8 +166,9 @@
 	        ))
 (add-hook 'before-save-hook 'gofmt-before-save)
 
+
 (use-package yasnippet
   :ensure t)
 
-	  
-
+(use-package markdown-mode
+  :ensure t)
