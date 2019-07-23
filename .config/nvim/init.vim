@@ -86,24 +86,33 @@ let g:go_highlight_generate_tags = 1
 let g:go_def_mapping_enabled = 0
 let g:go_template_autocreate = 0
 let g:go_auto_type_info = 0
-let g:go_updatetime = 100
-" CtrlP setting
-let g:ctrlp_working_path_mode = 'ra'
+let g:go_def_reuse_buffer = 1
 
-" Tagbar
-let g:tagbar_sort = 0
+augroup gopkgs
+  autocmd!
+  autocmd FileType go command! -buffer Import  call fzf#run({'source': 'gopkgs -no-vendor', 'sink': 'GoImport'})
+augroup END
+
+
+" CtrlP setting
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll|mod|sum)$',
   \ }
+let g:ctrlp_working_path_mode = 'rc'
+let g:ctrlp_show_hidden = 1
+
+" Tagbar
+let g:tagbar_sort = 0
 
 " Gitgutter 
 let g:gitgutter_enabled = 1
 
 " airline
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme = "gruvbox"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 0
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
@@ -123,7 +132,6 @@ let g:NERDSpaceDelims = 1
 " indentline
 let g:indentLine_enabled = 1
 
-set cursorline
 nmap <C-x>; <Plug>(easymotion-bd-f)
 
 autocmd FileType tagbar,nerdtree setlocal signcolumn=no
@@ -133,15 +141,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler norelativenumber
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
 set conceallevel=0
 
-let g:ctrlp_working_path_mode = 'rc'
-let g:ctrlp_show_hidden = 1
-let g:go_def_reuse_buffer = 1
-
-augroup gopkgs
-  autocmd!
-  autocmd FileType go command! -buffer Import  call fzf#run({'source': 'gopkgs -no-vendor', 'sink': 'GoImport'})
-augroup END
-
 let g:fzf_layout= { 'down': '30%' }
 
 let g:rainbow_active = 1
@@ -149,6 +148,32 @@ command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : 
 command! -bang -nargs=* Rg call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 " Automatically change the current directory
 autocmd BufEnter * silent! lcd %:p:h
-set switchbuf+=useopen
 let g:instant_markdown_autostart = 1
 let g:vim_markdown_folding_disabled = 1
+" Switch buffer without saveing
+set hidden
+" Set to auto read when a file is changed from the outside
+set autoread
+" Always show current position
+set ruler
+" Ignore case when searching
+set ignorecase
+" When searching try to be smart about cases
+set smartcase
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
+set nobackup
+set nowb
+set noswapfile
+
+set switchbuf=useopen,usetab,newtab
+set stal=2
+
+" Always show the status line
+set laststatus=2
+" Remap VIM 0 to first non-blank character
+map 0 ^
+

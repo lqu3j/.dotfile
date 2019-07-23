@@ -143,7 +143,8 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :config (setq lsp-prefer-flymake nil))
+  :config
+  (setq lsp-prefer-flymake nil))
 
 (use-package company-lsp
   :ensure t
@@ -158,11 +159,9 @@
 			(lsp-deferred)
 	        (add-to-list 'flycheck-disabled-checkers 'go-test)
 	        (add-to-list 'flycheck-disabled-checkers 'go-unconvert)
-	        (add-to-list 'flycheck-disabled-checkers 'go-errcheck)
             (add-to-list 'flycheck-disabled-checkers 'go-staticcheck)
-			(add-to-list 'flycheck-disabled-checkers 'go-vet)
 	        (add-to-list 'flycheck-disabled-checkers 'go-gofmt)
-	        (add-to-list 'flycheck-disabled-checkers 'go-golint)
+			(add-to-list 'go-build)
 	        ))
 (add-hook 'before-save-hook 'gofmt-before-save)
 
