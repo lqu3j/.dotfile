@@ -155,4 +155,3 @@ if [ -d ~/.zsh_plugins ]; then
   done
 fi
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
