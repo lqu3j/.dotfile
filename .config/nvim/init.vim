@@ -99,7 +99,7 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll|mod|sum)$',
   \ }
-let g:ctrlp_working_path_mode = 'rc'
+let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
 
 " Tagbar
@@ -139,8 +139,8 @@ autocmd FileType tagbar,nerdtree setlocal signcolumn=no
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler norelativenumber
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler relativenumber
-set conceallevel=0
 
+autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
 let g:fzf_layout= { 'down': '30%' }
 
 let g:rainbow_active = 1
@@ -177,3 +177,4 @@ set laststatus=2
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
+tnoremap <Esc> <C-\><C-n>

@@ -6,7 +6,8 @@ bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 bspc config focus_follows_pointer true
 bspc config pointer_follows_monitor true
-# start sxhkd which is a simple X hotkey daemon
+bspc rule -a Emacs state=tiled
+# sxhkd which is a simple X hotkey daemon
 sxhkd > /dev/null 2>&1 &
 # fix cursor displays X when not over window 
 xsetroot -cursor_name left_ptr > /dev/null 2>&1 &

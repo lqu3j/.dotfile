@@ -1,5 +1,3 @@
-(package-initialize)
-
 (setq package-archives '(("gnu-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
                          ("org-cn" . "http://mirrors.cloud.tencent.com/elpa/org/")
                          ("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
@@ -8,10 +6,10 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "InconsolataGo Nerd Font 16" nil t)
+(set-frame-font "Inconsolata 18" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
-					charset (font-spec :family "ZhunYuan" :size 16)))
+ 					charset (font-spec :family "WenQuanYi Micro Hei" :size 18)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
@@ -109,11 +107,19 @@
 (use-package solarized-theme
   :ensure
   :config
-  ;; Don't change the font for some headings and titles
   (setq solarized-use-variable-pitch nil)
-  ;; Make the modeline high contrast
-  (setq solarized-high-contrast-mode-line nil)
-  (load-theme 'solarized-dark t))
+  (setq solarized-scale-org-headlines nil)
+  (setq solarized-use-less-bold t)
+  (setq solarized-use-more-italic t)
+  (setq solarized-emphasize-indicators nil)
+  
+  (setq solarized-height-minus-1 1.0)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+  (load-theme 'solarized-light t))
+
 
 (use-package multiple-cursors
   :ensure t
@@ -152,22 +158,28 @@
 (use-package go-mode
   :ensure t
   :config (setq gofmt-command "goimports"))
-;; put hook out of use-package, because if put it use package is not working.
+
+;; put hook out of use-package, because if put it in use package is not working.
 (add-hook 'go-mode-hook
 	      (lambda()
 			(flycheck-mode)
 			(lsp-deferred)
-	        (add-to-list 'flycheck-disabled-checkers 'go-test)
+			(add-to-list 'flycheck-disabled-checkers 'go-test)
 	        (add-to-list 'flycheck-disabled-checkers 'go-unconvert)
+	        (add-to-list 'flycheck-disabled-checkers 'go-errcheck)
             (add-to-list 'flycheck-disabled-checkers 'go-staticcheck)
+	        (add-to-list 'flycheck-disabled-checkers 'go-vet)
 	        (add-to-list 'flycheck-disabled-checkers 'go-gofmt)
-			(add-to-list 'go-build)
+	        (add-to-list 'flycheck-disabled-checkers 'go-golint)
 	        ))
 (add-hook 'before-save-hook 'gofmt-before-save)
-
 
 (use-package yasnippet
   :ensure t)
 
 (use-package markdown-mode
   :ensure t)
+
+(use-package avy
+  :ensure
+  :bind ("C-'" . avy-goto-char))
