@@ -1,3 +1,6 @@
+(unless (>= emacs-major-version 27)
+  (package-initialize))
+
 (setq package-archives '(("gnu-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
                          ("org-cn" . "http://mirrors.cloud.tencent.com/elpa/org/")
                          ("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
@@ -68,12 +71,13 @@
 (use-package smartparens
   :ensure t
   :config
-  (smartparens-global-mode)
+  (smartparens-global-mode +1)
   (sp-local-pair '(emacs-lisp-mode) "'" "'" :actions nil))
 
 (use-package hungry-delete
   :ensure t
-  :hook (prog-mode . hungry-delete-mode))
+  :config
+  (global-hungry-delete-mode +1))
 
 (use-package ace-window
   :ensure t
@@ -137,20 +141,22 @@
 (use-package avy
   :ensure t)
 
-(use-package diminish
-  :ensure t)
-
 (use-package anzu
   :ensure t)
 
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :config
+  (setq flycheck-checker-error-threshold 5)
+  (setq flycheck-highlighting-mode 'lines))
 
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil))
+  (setq lsp-prefer-flymake nil)
+  ;; lsp server auto restart
+  (setq lsp-restart 'auto-restart))
 
 (use-package company-lsp
   :ensure t
@@ -183,3 +189,20 @@
 (use-package avy
   :ensure
   :bind ("C-'" . avy-goto-char))
+
+(use-package smart-mode-line
+  :ensure t
+  :config
+  (sml/setup)
+  (column-number-mode 1))
+
+(use-package diminish
+  :ensure t)
+
+(diminish 'hungry-delete-mode)
+(diminish 'smartparens-mode)
+(diminish 'projectile-mode)
+(diminish 'eldoc-mode)
+(diminish 'ivy-mode)
+(diminish 'yas-minor-mode)
+(diminish 'flycheck-mode)
