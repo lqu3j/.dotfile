@@ -9,4 +9,4 @@ if [ -f "$userresources" ]; then
 fi
 
 $HOME/.local/bin/autostart
-exec bspwm > /dev/null 2>&1 
+exec i3 > /dev/null 2>&1 

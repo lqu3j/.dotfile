@@ -114,7 +114,7 @@ super + n
 
 super + shift + n
     id=$(bspc query -N -n .hidden | tail -n1);\
-    bspc node $id -g hidden=off sticky=on;bspc node $id -d focused; bspc node -f $id;\
+    bspc node $id -g hidden=off;bspc node $id -d focused; bspc node -f $id
 #super + d
 # 	id=$(cat /tmp/scratchid);\
 # 	bspc node $id --flag hidden;bspc node $id -d focused; bspc node -f $id;
