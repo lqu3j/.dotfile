@@ -34,12 +34,15 @@ URxvt.font:xft:InconsolataGo Nerd Font Mono:Regular:pixelsize=22,xft:ZhunYuan:Re
 URxvt.boldfont:xft:InconsolataGo Nerd Font Mono:Bold:pixelsize=22,xft:ZhunYuan:Bold:pixelsize=20,xft:Symbola:Bold:pixelsize=14
 
 
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+
 !-*- Perl extensions -*-
-URxvt.perl-ext-common: default,selection-to-clipboard,pasta,matcher,keyboard-select
-URxvt.keysym.M-u:     perl:url-select:select_next
-URxvt.url-launcher:   /usr/bin/google-chrome-stable
-URxvt.underlineURLs:  True
-URxvt.matcher.button: 1
-URxvt.keysym.M-Escape:perl:keyboard-select:activate
-URxvt.keysym.Control-Shift-V:     perl:pasta:paste
-URxvt.clipboard.autocopy: true
+! URxvt.perl-ext-common: default,selection-to-clipboard,pasta,matcher,keyboard-select
+! URxvt.keysym.M-u:     perl:url-select:select_next
+! URxvt.url-launcher:   /usr/bin/google-chrome-stable
+! URxvt.underlineURLs:  True
+! URxvt.matcher.button: 1
+! URxvt.keysym.M-Escape:perl:keyboard-select:activate
+! URxvt.keysym.Control-Shift-V:     perl:pasta:paste
+! URxvt.clipboard.autocopy: true

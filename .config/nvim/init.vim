@@ -22,6 +22,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'luochen1990/rainbow'
+Plug 'sirver/ultisnips'
 call plug#end()
 
 " The leader key
@@ -87,6 +88,8 @@ let g:go_def_mapping_enabled = 0
 let g:go_template_autocreate = 0
 let g:go_auto_type_info = 0
 let g:go_def_reuse_buffer = 1
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 augroup gopkgs
   autocmd!
@@ -109,14 +112,15 @@ let g:tagbar_sort = 0
 let g:gitgutter_enabled = 1
 
 " airline
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline_theme = "gruvbox"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#max_list = 15
+call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
+set completeopt-=preview
 
 " ale
 let g:ale_linters = {
@@ -176,5 +180,18 @@ set stal=2
 set laststatus=2
 " Remap VIM 0 to first non-blank character
 map 0 ^
+" Set 10 lines to the cursor - when moving vertically using j/k
+set so=10
 
 tnoremap <Esc> <C-\><C-n>
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:go_snippet_engine = "ultisnips"
+
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+

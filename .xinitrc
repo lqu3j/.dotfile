@@ -8,5 +8,6 @@ if [ -f "$userresources" ]; then
 
 fi
 
+source ~/.zshenv
 $HOME/.local/bin/autostart
 exec i3 > /dev/null 2>&1 

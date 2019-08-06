@@ -57,7 +57,7 @@
   :config
   (setq company-tooltip-limit 5
 		company-idle-delay 0.1
-		company-echo-delay 0
+		company-echo-delay 0.1
 		company-minimum-prefix-length 2)
   :bind(:map company-active-map
 			 ("C-n" . company-select-next)
@@ -150,26 +150,27 @@
   (setq flycheck-checker-error-threshold 5)
   (setq flycheck-highlighting-mode 'lines))
 
-(use-package lsp-mode
+(use-package company-go
   :ensure t
-  :commands (lsp lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil)
-  ;; lsp server auto restart
-  (setq lsp-restart 'auto-restart))
+  (setq company-go-gocode-command "gocode")
+  (setq company-go-show-annotation t)
+  (setq company-go-gocode-args '("-builtin" "-unimported-packages"))
+  )
 
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp)
 (use-package go-mode
   :ensure t
-  :config (setq gofmt-command "goimports"))
+  :config (setq gofmt-command "goimports")
+  :bind ("M-." . godef-jump))
+
+(use-package go-eldoc
+  :ensure t)
 
 ;; put hook out of use-package, because if put it in use package is not working.
 (add-hook 'go-mode-hook
 	      (lambda()
+			(go-eldoc-setup)
 			(flycheck-mode)
-			(lsp-deferred)
 			(add-to-list 'flycheck-disabled-checkers 'go-test)
 	        (add-to-list 'flycheck-disabled-checkers 'go-unconvert)
 	        (add-to-list 'flycheck-disabled-checkers 'go-errcheck)
@@ -177,6 +178,7 @@
 	        (add-to-list 'flycheck-disabled-checkers 'go-vet)
 	        (add-to-list 'flycheck-disabled-checkers 'go-gofmt)
 	        (add-to-list 'flycheck-disabled-checkers 'go-golint)
+			(set (make-local-variable 'company-backends) '(company-go company-files company-keywords))
 	        ))
 (add-hook 'before-save-hook 'gofmt-before-save)
 
@@ -205,4 +207,3 @@
 (diminish 'eldoc-mode)
 (diminish 'ivy-mode)
 (diminish 'yas-minor-mode)
-(diminish 'flycheck-mode)

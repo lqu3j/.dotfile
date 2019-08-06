@@ -106,6 +106,7 @@ alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
 alias rsync="rsync -avcPz"
 alias vim="nvim"
+alias vimdiff="nvim -d"
 
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
 	eval "$(<~/.ssh-agent-thing)"
