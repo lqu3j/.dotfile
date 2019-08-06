@@ -10,39 +10,5 @@ Emacs.toolBar: off
 Emacs.menuBar: off
 Emacs.verticalScrollBars: off
 
-URxvt.background: #282828
-URxvt.foreground: #ebdbb2
-URxvt.color0:  #282828
-URxvt.color8:  #928374
-URxvt.color1:  #cc241d
-URxvt.color9:  #fb4934
-URxvt.color2:  #98971a
-URxvt.color10: #b8bb26
-URxvt.color3:  #d79921
-URxvt.color11: #fabd2f
-URxvt.color4:  #458588
-URxvt.color12: #83a598
-URxvt.color5:  #b16286
-URxvt.color13: #d3869b
-URxvt.color6:  #689d6a
-URxvt.color14: #8ec07c
-URxvt.color7:  #a89984
-URxvt.color15: #ebdbb2
-
-URxvt.scrollBar: False
-URxvt.font:xft:InconsolataGo Nerd Font Mono:Regular:pixelsize=22,xft:ZhunYuan:Regular:pixelsize=20,xft:Symbola:Regular:pixelsize=14
-URxvt.boldfont:xft:InconsolataGo Nerd Font Mono:Bold:pixelsize=22,xft:ZhunYuan:Bold:pixelsize=20,xft:Symbola:Bold:pixelsize=14
-
-
-URxvt.keysym.Shift-Control-V: eval:paste_clipboard
-URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
-
-!-*- Perl extensions -*-
-! URxvt.perl-ext-common: default,selection-to-clipboard,pasta,matcher,keyboard-select
-! URxvt.keysym.M-u:     perl:url-select:select_next
-! URxvt.url-launcher:   /usr/bin/google-chrome-stable
-! URxvt.underlineURLs:  True
-! URxvt.matcher.button: 1
-! URxvt.keysym.M-Escape:perl:keyboard-select:activate
-! URxvt.keysym.Control-Shift-V:     perl:pasta:paste
-! URxvt.clipboard.autocopy: true
+st.alpha: 1
+st.font: Inconsolata-16

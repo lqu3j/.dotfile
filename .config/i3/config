@@ -30,7 +30,7 @@ font pango:Misc Termsyn 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec xfce4-terminal
+bindsym $mod+Return exec st
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -155,7 +155,6 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
 	position top
-	tray_output DP1
     status_command i3blocks
 	font pango:Misc Termsyn 10
 }
