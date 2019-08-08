@@ -9,7 +9,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Inconsolata 18" nil t)
+(set-frame-font "Inconsolata 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
  					charset (font-spec :family "WenQuanYi Micro Hei" :size 18)))
@@ -108,21 +108,10 @@
   :ensure t
   :config (counsel-projectile-mode))
 
-(use-package solarized-theme
-  :ensure
+(use-package gruvbox-theme
+  :ensure t
   :config
-  (setq solarized-use-variable-pitch nil)
-  (setq solarized-scale-org-headlines nil)
-  (setq solarized-use-less-bold t)
-  (setq solarized-use-more-italic t)
-  (setq solarized-emphasize-indicators nil)
-  
-  (setq solarized-height-minus-1 1.0)
-  (setq solarized-height-plus-1 1.0)
-  (setq solarized-height-plus-2 1.0)
-  (setq solarized-height-plus-3 1.0)
-  (setq solarized-height-plus-4 1.0)
-  (load-theme 'solarized-light t))
+  (load-theme 'gruvbox t))
 
 
 (use-package multiple-cursors
@@ -160,16 +149,22 @@
   :bind(:map go-mode-map
 			 ("M-?" . lsp-ui-peek-find-references)))
 
+(use-package flycheck
+  :ensure t)
+
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-prefer-flymake nil))
 
 (use-package go-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq gofmt-command "goimports"))
 
 ;; put hook out of use-package, because if put it use package is not working.
 (add-hook 'go-mode-hook 'lsp-deferred)
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 (use-package yasnippet
   :ensure t)
@@ -181,11 +176,10 @@
   :ensure
   :bind ("C-'" . avy-goto-char))
 
-(use-package smart-mode-line
+(use-package powerline
   :ensure t
   :config
-  (sml/setup)
-  (column-number-mode 1))
+  (powerline-center-theme))
 
 (use-package diminish
   :ensure t)
