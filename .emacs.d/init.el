@@ -144,43 +144,32 @@
 (use-package anzu
   :ensure t)
 
-(use-package flycheck
+(use-package company-lsp
   :ensure t
-  :config
-  (setq flycheck-checker-error-threshold 5)
-  (setq flycheck-highlighting-mode 'lines))
+  :commands company-lsp)
 
-(use-package company-go
+(use-package lsp-ui
   :ensure t
+  :commands lsp-ui-mode
   :config
-  (setq company-go-gocode-command "gocode")
-  (setq company-go-show-annotation t)
-  (setq company-go-gocode-args '("-builtin" "-unimported-packages"))
-  )
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-flycheck-enable t)
+  (setq lsp-ui-sideline-show-code-actions nil)
+  (setq lsp-ui-sideline-show-symbol nil)
+  (setq lsp-ui-sideline-show-hover nil)
+  :bind(:map go-mode-map
+			 ("M-?" . lsp-ui-peek-find-references)))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-prefer-flymake nil))
 
 (use-package go-mode
-  :ensure t
-  :config (setq gofmt-command "goimports")
-  :bind ("M-." . godef-jump))
-
-(use-package go-eldoc
   :ensure t)
 
-;; put hook out of use-package, because if put it in use package is not working.
-(add-hook 'go-mode-hook
-	      (lambda()
-			(go-eldoc-setup)
-			(flycheck-mode)
-			(add-to-list 'flycheck-disabled-checkers 'go-test)
-	        (add-to-list 'flycheck-disabled-checkers 'go-unconvert)
-	        (add-to-list 'flycheck-disabled-checkers 'go-errcheck)
-            (add-to-list 'flycheck-disabled-checkers 'go-staticcheck)
-	        (add-to-list 'flycheck-disabled-checkers 'go-vet)
-	        (add-to-list 'flycheck-disabled-checkers 'go-gofmt)
-	        (add-to-list 'flycheck-disabled-checkers 'go-golint)
-			(set (make-local-variable 'company-backends) '(company-go company-files company-keywords))
-	        ))
-(add-hook 'before-save-hook 'gofmt-before-save)
+;; put hook out of use-package, because if put it use package is not working.
+(add-hook 'go-mode-hook 'lsp-deferred)
 
 (use-package yasnippet
   :ensure t)
