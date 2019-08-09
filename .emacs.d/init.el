@@ -18,7 +18,8 @@
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
-
+;; when startup, don't display modeline
+(setq mode-line-format nil)
 
 (add-hook 'emacs-startup-hook
 		  (lambda()
