@@ -1,9 +1,9 @@
 (unless (>= emacs-major-version 27)
   (package-initialize))
 
-(setq package-archives '(("gnu-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
-                         ("org-cn" . "http://mirrors.cloud.tencent.com/elpa/org/")
-                         ("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
+
+(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+						 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
