@@ -185,7 +185,11 @@
   :ensure t)
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 (use-package avy
   :ensure
@@ -215,5 +219,24 @@
 		((looking-at "\\s)") (forward-char 1) (backward-list 1))
 		(t (self-insert-command (or arg 1)))))
 
+(use-package crux
+  :ensure t
+  :bind
+  ([remap move-beginning-of-line] . crux-move-beginning-of-line))
+
 (global-set-key (kbd "M-s") 'swiper)
 (save-place-mode +1)
+
+(defun window-half-height ()
+  (max 1 (/ (1- (window-height (selected-window))) 2)))
+
+(defun scroll-up-half ()
+  (interactive)
+  (scroll-up (window-half-height)))
+
+(defun scroll-down-half ()         
+  (interactive)                    
+  (scroll-down (window-half-height)))
+
+(global-set-key (kbd "C-v") 'scroll-up-half)
+(global-set-key (kbd "M-v") 'scroll-down-half)
