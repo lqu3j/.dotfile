@@ -49,8 +49,10 @@
 (use-package projectile
   :ensure t
   :config (projectile-mode)
-  :bind (:map projectile-mode-map
-			  ("C-c p" . projectile-command-map)))
+  :bind
+  ("C-c p p" . projectile-switch-project)
+  ("C-c p s" . projectile-ripgrep)
+  ("C-c p f" . projectile-find-file))
 
 (use-package company
   :ensure t
@@ -103,17 +105,23 @@
   :ensure t
   :bind (("C-x b" . counsel-ibuffer)
 		 ("C-x C-r" . counsel-recentf)
-		 ("M-x" . counsel-M-x)))
+		 ("M-x" . counsel-M-x)
+		 ("C-c s" . counsel-rg))
+  :config
+  (setq counsel-rg-base-command "rg -S --no-heading --line-number --color never --hidden %s"))
 
 (use-package counsel-projectile
   :ensure t
-  :config (counsel-projectile-mode))
+  :config
+  (counsel-projectile-mode)
+  (setq counsel-projectile-switch-project-action 'dired))
 
-(use-package gruvbox-theme
+(use-package leuven-theme
   :ensure t
   :config
-  (load-theme 'gruvbox t))
-
+  (load-theme 'leuven t)
+  (setq leuven-scale-outline-headlines nil)
+  (setq leuven-scale-org-agenda-structure nil))
 
 (use-package multiple-cursors
   :ensure t
@@ -132,7 +140,13 @@
   :ensure t)
 
 (use-package anzu
-  :ensure t)
+  :ensure t
+  :bind
+  ([remap query-replace] . anzu-query-replace)
+  ([remap query-replace-regexp] . anzu-query-replace-regexp))
+
+;; Is will not take effect config in use-package.
+(global-anzu-mode +1)
 
 (use-package company-lsp
   :ensure t
@@ -191,12 +205,15 @@
 (diminish 'eldoc-mode)
 (diminish 'ivy-mode)
 (diminish 'yas-minor-mode)
+(diminish 'anzu-mode)
 
 (global-set-key "%" 'match-paren)
-
 (defun match-paren (arg)
   "Go to the matching paren if on a paren; otherwise insert %."
   (interactive "p")
   (cond ((looking-at "\\s(") (forward-list 1) (backward-char 1))
 		((looking-at "\\s)") (forward-char 1) (backward-list 1))
 		(t (self-insert-command (or arg 1)))))
+
+(global-set-key (kbd "M-s") 'swiper)
+(save-place-mode +1)
