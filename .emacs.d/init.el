@@ -240,3 +240,12 @@
 
 (global-set-key (kbd "C-v") 'scroll-up-half)
 (global-set-key (kbd "M-v") 'scroll-down-half)
+
+
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'" . web-mode))
+
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js\\'" . js2-mode))
