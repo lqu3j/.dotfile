@@ -1,0 +1,27 @@
+# required by sys-boot/os-prober-1.76-r1::gentoo
+>=sys-boot/grub-2.02-r4 mount
+# required by sys-kernel/genkernel-3.5.3.3::gentoo
+>=sys-apps/util-linux-2.33.2 static-libs
+# required by x11-libs/libxkbcommon-0.8.4::gentoo[X]
+# required by x11-misc/rofi-1.5.2::gentoo
+>=x11-libs/libxcb-1.13.1 xkb
+# required by x11-misc/rofi-1.5.2::gentoo
+>=x11-libs/cairo-1.16.0-r3 xcb
+# required by app-text/evince-3.30.2::gentoo
+>=dev-libs/glib-2.58.3 dbus
+# required by app-text/evince-3.30.2::gentoo
+>=app-text/poppler-0.77.0 cairo
+# required by net-vpn/libreswan-3.27::gentoo
+>=dev-libs/nss-3.40.1-r1 utils
+# required by dev-util/itstool-2.0.2::gentoo
+# required by gnome-extra/yelp-xsl-3.30.1::gentoo
+# required by app-text/yelp-tools-3.28.0::gentoo
+# required by app-text/evince-3.30.2::gentoo
+>=dev-libs/libxml2-2.9.9-r1 python
+
+# required by dev-qt/qtcore-5.12.3::gentoo
+# required by dev-qt/qtdbus-5.12.3::gentoo
+# required by app-i18n/fcitx-qt5-1.2.3::gentoo
+# required by fcitx-qt5 (argument)
+>=dev-libs/libpcre2-10.32 pcre16
+

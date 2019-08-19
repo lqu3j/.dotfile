@@ -1,0 +1,15 @@
+# required by app-editors/neovim-0.3.7::gentoo
+=dev-libs/unibilium-2.0.0 ~amd64
+# required by =app-editors/neovim-0.3.7 (argument)
+=app-editors/neovim-0.3.7 ~amd64
+# required by =dev-ruby/sass-listen-4.0.0 (argument)
+=dev-ruby/sass-listen-4.0.0 ~amd64
+# required by =app-admin/stow-2.2.2-r1 (argument)
+=app-admin/stow-2.2.2-r1 ~amd64
+# required by =dev-ruby/sass-3.5.7 (argument)
+=dev-ruby/sass-3.5.7 ~amd64
+# required by =dev-python/neovim-python-client-0.3.2-r1 (argument)
+=dev-python/neovim-python-client-0.3.2-r1 ~amd64
+# required by =dev-libs/msgpack-1.1.0 (argument)
+=dev-libs/msgpack-1.1.0 ~amd64
+

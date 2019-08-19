@@ -1,0 +1,4 @@
+# required by google-chrome (argument)
+www-client/google-chrome google-chrome
+sys-kernel/linux-firmware linux-fw-redistributable no-source-code
+x11-drivers/nvidia-drivers NVIDIA-r2

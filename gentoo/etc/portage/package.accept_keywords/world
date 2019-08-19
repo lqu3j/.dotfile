@@ -1,0 +1,8 @@
+x11-themes/arc-theme ~amd64
+app-editors/emacs-vcs ~amd64
+app-editors/neovim ~amd64
+app-admin/stow ~amd64
+net-proxy/shadowsocks-libev ~amd64
+x11-wm/bspwm ~amd64
+x11-misc/sxhkd ~amd64
+=app-i18n/ibus-rime-1.4.0 ~amd64
