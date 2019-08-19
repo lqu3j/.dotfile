@@ -15,22 +15,44 @@ Emacs.verticalScrollBars: off
 *.cursorColor: white
 
 /* !! gruvbox: */
-*.color0: #1d2021
-*.color1: #cc241d
-*.color2: #98971a
-*.color3: #d79921
-*.color4: #458588
-*.color5: #b16286
-*.color6: #689d6a
-*.color7: #a89984
-*.color8: #928374
-*.color9: #fb4934
-*.color10: #b8bb26
-*.color11: #fabd2f
-*.color12: #83a598
-*.color13: #d3869b
-*.color14: #8ec07c
-*.color15: #ebdbb2
+URxvt.color0: #1d2021
+URxvt.color1: #cc241d
+URxvt.color2: #98971a
+URxvt.color3: #d79921
+URxvt.color4: #458588
+URxvt.color5: #b16286
+URxvt.color6: #689d6a
+URxvt.color7: #a89984
+URxvt.color8: #928374
+URxvt.color9: #fb4934
+URxvt.color10: #b8bb26
+URxvt.color11: #fabd2f
+URxvt.color12: #83a598
+URxvt.color13: #d3869b
+URxvt.color14: #8ec07c
+URxvt.color15: #ebdbb2
 
-st.alpha: 1
-st.font: Inconsolata-16
+!! disable default bindings for Control-Shift
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+URxvt.scrollBar: False
+
+URxvt.font: xft:Inconsolata for Powerline:pixelsize=23:antialias=true:hinting=full,xft:Symbola:pixelsize=17:antialias=true:hinting=full
+URxvt.boldFont: xft:Inconsolata for Powerline:style=bold:pixelsize=23:antialias=true:hinting=full,xft:Symbola:pixelsize=17:antialias=true:hinting=full
+
+!! scroll
+!! do not scroll with output
+URxvt*scrollTtyOutput:      false
+!! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer:     true
+!! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress:    true
+
+!! scrollback buffer
+URxvt.secondaryScreen:  1
+URxvt.secondaryScroll:  0
+URxvt.secondaryWheel:   1
+URxvt.letterSpace: 1
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
