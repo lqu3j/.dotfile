@@ -49,8 +49,10 @@
 (use-package projectile
   :ensure t
   :config (projectile-mode)
-  :bind (:map projectile-mode-map
-			  ("C-c p" . projectile-command-map)))
+  :bind
+  ("C-c p p" . projectile-switch-project)
+  ("C-c p s" . projectile-ripgrep)
+  ("C-c p f" . projectile-find-file))
 
 (use-package company
   :ensure t
@@ -103,17 +105,23 @@
   :ensure t
   :bind (("C-x b" . counsel-ibuffer)
 		 ("C-x C-r" . counsel-recentf)
-		 ("M-x" . counsel-M-x)))
+		 ("M-x" . counsel-M-x)
+		 ("C-c s" . counsel-rg))
+  :config
+  (setq counsel-rg-base-command "rg -S --no-heading --line-number --color never --hidden %s"))
 
 (use-package counsel-projectile
   :ensure t
-  :config (counsel-projectile-mode))
+  :config
+  (counsel-projectile-mode)
+  (setq counsel-projectile-switch-project-action 'dired))
 
-(use-package gruvbox-theme
+(use-package leuven-theme
   :ensure t
   :config
-  (load-theme 'gruvbox t))
-
+  (load-theme 'leuven t)
+  (setq leuven-scale-outline-headlines nil)
+  (setq leuven-scale-org-agenda-structure nil))
 
 (use-package multiple-cursors
   :ensure t
@@ -132,7 +140,13 @@
   :ensure t)
 
 (use-package anzu
-  :ensure t)
+  :ensure t
+  :bind
+  ([remap query-replace] . anzu-query-replace)
+  ([remap query-replace-regexp] . anzu-query-replace-regexp))
+
+;; Is will not take effect config in use-package.
+(global-anzu-mode +1)
 
 (use-package company-lsp
   :ensure t
@@ -171,7 +185,11 @@
   :ensure t)
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 (use-package avy
   :ensure
@@ -191,12 +209,43 @@
 (diminish 'eldoc-mode)
 (diminish 'ivy-mode)
 (diminish 'yas-minor-mode)
+(diminish 'anzu-mode)
 
 (global-set-key "%" 'match-paren)
-
 (defun match-paren (arg)
   "Go to the matching paren if on a paren; otherwise insert %."
   (interactive "p")
   (cond ((looking-at "\\s(") (forward-list 1) (backward-char 1))
 		((looking-at "\\s)") (forward-char 1) (backward-list 1))
 		(t (self-insert-command (or arg 1)))))
+
+(use-package crux
+  :ensure t
+  :bind
+  ([remap move-beginning-of-line] . crux-move-beginning-of-line))
+
+(global-set-key (kbd "M-s") 'swiper)
+(save-place-mode +1)
+
+(defun window-half-height ()
+  (max 1 (/ (1- (window-height (selected-window))) 2)))
+
+(defun scroll-up-half ()
+  (interactive)
+  (scroll-up (window-half-height)))
+
+(defun scroll-down-half ()         
+  (interactive)                    
+  (scroll-down (window-half-height)))
+
+(global-set-key (kbd "C-v") 'scroll-up-half)
+(global-set-key (kbd "M-v") 'scroll-down-half)
+
+
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'" . web-mode))
+
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js\\'" . js2-mode))

@@ -1,23 +1,17 @@
-.emacs.d/projectile.cache
-.config/nvim/.netrwhist
-.config/nvim/plugged
-.emacs.d/.historian
-.emacs.d/.smex-items
-.emacs.d/custom.el
-.emacs.d/ditaa0_9.jar
-.emacs.d/elpa*
-.emacs.d/org-clock-save.el
-.emacs.d/plantuml.jar
-.emacs.d/projectile-bookmarks.eld
-.emacs.d/recentf
-.emacs.d/.mc-lists.el
-.emacs.d/anaconda-mode/
-*uuid*
-.emacs.d/.lsp-session-v1
-.emacs.d/transient/*
-.local/share/fonts/Robot Mono/*
-.local/share/fonts/monaco.ttf
-.config/xfce4/xfconf/
-.emacs.d/.cache/
-.emacs.d/places
-.emacs.d/auto-save-list/
+## File
+.uuid
+recentf
+.lsp-session-v1
+custom.el
+.smex-items
+projectile-bookmarks.eld
+monaco.ttf
+places
+.mc-lists.el
+
+## Directory
+xfconf/
+Robot Mono/
+elpa/
+auto-save-list/
+transient/

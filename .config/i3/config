@@ -100,10 +100,10 @@ set $ws2 "2:"
 set $ws3 "3:"
 set $ws4 "4:"
 
-workspace $ws1 output HDMI2
-workspace $ws2 output HDMI2
-workspace $ws3 output DP1
-workspace $ws4 output DP1
+workspace $ws1 output HDMI-2
+workspace $ws2 output HDMI-2
+workspace $ws3 output DP-1
+workspace $ws4 output DP-1
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
