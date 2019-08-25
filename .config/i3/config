@@ -169,3 +169,8 @@ popup_during_fullscreen leave_fullscreen
 
 gaps inner 10
 gaps outer 5
+
+exec --no-startup-id fcitx
+exec --no-startup-id feh --bg-scale ~/pictures/simple.png
+exec --no-startup-id $HOME/.local/bin/autostart
+exec --no-startup-id compton --config ~/.config/compton.conf -b
