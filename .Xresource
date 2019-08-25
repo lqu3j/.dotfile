@@ -6,6 +6,9 @@ Xft.hintstyle:  hintslight
 Xft.autohint:   false
 Xft.lcdfilter:  lcddefault
 
+Xcursor.theme: ComixCursors-Black
+Xcursor.size: 40
+
 Emacs.toolBar: off
 Emacs.menuBar: off
 Emacs.verticalScrollBars: off
