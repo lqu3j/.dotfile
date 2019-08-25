@@ -1,15 +1,13 @@
 (unless (>= emacs-major-version 27)
   (package-initialize))
 
-
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-						 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
-
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Inconsolata 16" nil t)
+(set-frame-font "Inconsolata for Powerline 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
  					charset (font-spec :family "WenQuanYi Micro Hei" :size 18)))
@@ -177,10 +175,6 @@
   :config
   (setq gofmt-command "goimports"))
 
-;; put hook out of use-package, because if put it use package is not working.
-(add-hook 'go-mode-hook 'lsp-deferred)
-(add-hook 'before-save-hook 'gofmt-before-save)
-
 (use-package yasnippet
   :ensure t)
 
@@ -249,3 +243,52 @@
 (use-package js2-mode
   :ensure t
   :mode ("\\.js\\'" . js2-mode))
+
+(use-package web-beautify
+  :ensure t)
+
+(use-package json-mode
+  :ensure t)
+
+(use-package tern
+  :ensure t)
+
+(use-package company-tern
+  :ensure t)
+
+(add-to-list 'company-backends 'company-tern)
+(setq company-tooltip-align-annotations t)
+(eval-after-load 'js2-mode
+  '(add-hook 'js2-mode-hook
+             (lambda ()
+			   (tern-mode)
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+
+(eval-after-load 'json-mode
+  '(add-hook 'json-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+
+(eval-after-load 'sgml-mode
+  '(add-hook 'html-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+
+(eval-after-load 'web-mode
+  '(add-hook 'web-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+
+(eval-after-load 'css-mode
+  '(add-hook 'css-mode-hook
+             (lambda ()
+               (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
+
+(eval-after-load 'go-mode
+  '(add-hook 'go-mode-hook
+			 (lambda()
+			   (lsp-deferred)
+			   (add-hook 'before-save-hook 'gofmt-before-save t t)
+			   (remove-hook 'before-save-hook 'lsp--before-save t t))))
+
+(setq js2-include-node-externs t)
