@@ -167,10 +167,18 @@ default_border pixel 3
 default_floating_border normal
 popup_during_fullscreen leave_fullscreen
 
+# i3-gaps
+smart_gaps on
 gaps inner 10
 gaps outer 5
 
+# startup applications
 exec --no-startup-id fcitx
 exec --no-startup-id feh --bg-scale ~/pictures/simple.png
 exec --no-startup-id $HOME/.local/bin/autostart
 exec --no-startup-id compton --config ~/.config/compton.conf -b
+
+# set specific windows to floating mode
+for_window [window_role="pop-up"]                   floating enable
+for_window [class="Fcitx-config-gtk3"]              floating enable
+for_window [class="Lxappearance"]                   floating enable
