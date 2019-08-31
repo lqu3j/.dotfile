@@ -9,19 +9,16 @@ Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'w0rp/ale'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'easymotion/vim-easymotion'
-Plug 'yggdroot/indentline'
 Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'luochen1990/rainbow'
-Plug 'sirver/ultisnips'
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 call plug#end()
 
 " The leader key
@@ -58,10 +55,6 @@ set expandtab
 set shiftwidth=4
 set tabstop=4
 
-set updatetime=100
-
-set signcolumn=yes
-
 " Do not jump to forward
 nnoremap * *``
 
@@ -85,7 +78,7 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
 let g:go_def_mapping_enabled = 0
 let g:go_template_autocreate = 0
-let g:go_auto_type_info = 0
+let g:go_auto_type_info = 1
 let g:go_def_reuse_buffer = 1
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
@@ -116,24 +109,9 @@ let g:airline_theme = "gruvbox"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
-set completeopt-=preview
-
-" ale
-let g:ale_linters = {
-\   'go': ['gopls'],
-\}
-let g:ale_linters_explicit = 1
-let g:airline#extensions#ale#enabled = 1
-
 " nerdcommenter
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
-
-" indentline
-let g:indentLine_enabled = 1
 
 nmap <C-x>; <Plug>(easymotion-bd-f)
 
@@ -184,13 +162,26 @@ set so=10
 
 tnoremap <Esc> <C-\><C-n>
 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:go_snippet_engine = "ultisnips"
-
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
 
+" Better display for messages
+set cmdheight=2
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=100
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Add status line support, for integration with other plugin, checkout `:h
+" coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
