@@ -179,6 +179,5 @@ exec --no-startup-id $HOME/.local/bin/autostart
 exec --no-startup-id compton --config ~/.config/compton.conf -b
 
 # set specific windows to floating mode
-for_window [window_role="pop-up"]                   floating enable
 for_window [class="Fcitx-config-gtk3"]              floating enable
 for_window [class="Lxappearance"]                   floating enable
