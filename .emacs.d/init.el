@@ -7,10 +7,10 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Inconsolata for Powerline 16" nil t)
+(set-frame-font "Inconsolata 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
- 					charset (font-spec :family "WenQuanYi Micro Hei" :size 18)))
+ 					charset (font-spec :family "WenQuanYi Micro Hei" :size 22)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
