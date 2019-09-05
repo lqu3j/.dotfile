@@ -1,5 +1,13 @@
-(unless (>= emacs-major-version 27)
-  (package-initialize))
+;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
+(when (version< emacs-version "27.0") (package-initialize))
+(setq debug-on-error t)
+
+(let ((normal-gc-cons-threshold (* 20 1024 1024))
+      (init-gc-cons-threshold (* 128 1024 1024)))
+  (setq gc-cons-threshold init-gc-cons-threshold)
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+
 
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
@@ -10,7 +18,7 @@
 (set-frame-font "Inconsolata for Powerline 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
- 					charset (font-spec :family "WenQuanYi Micro Hei" :size 18)))
+ 					charset (font-spec :family "WenQuanYi Micro Hei" :size 22)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
@@ -114,12 +122,38 @@
   (counsel-projectile-mode)
   (setq counsel-projectile-switch-project-action 'dired))
 
-(use-package leuven-theme
+(use-package solarized-theme
   :ensure t
   :config
-  (load-theme 'leuven t)
-  (setq leuven-scale-outline-headlines nil)
-  (setq leuven-scale-org-agenda-structure nil))
+  (load-theme 'solarized-light t)
+  ;; make the fringe stand out from the background
+  (setq solarized-distinct-fringe-background t)
+
+  ;; Don't change the font for some headings and titles
+  (setq solarized-use-variable-pitch nil)
+
+  ;; make the modeline high contrast
+  (setq solarized-high-contrast-mode-line t)
+
+  ;; Use less bolding
+  (setq solarized-use-less-bold t)
+
+  ;; Use more italics
+  (setq solarized-use-more-italic t)
+
+  ;; Use less colors for indicators such as git:gutter, flycheck and similar
+  (setq solarized-emphasize-indicators nil)
+
+  ;; Don't change size of org-mode headlines (but keep other size-changes)
+  (setq solarized-scale-org-headlines nil)
+
+  ;; Avoid all font-size changes
+  (setq solarized-height-minus-1 1.0)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+  )
 
 (use-package multiple-cursors
   :ensure t
@@ -289,6 +323,6 @@
 			 (lambda()
 			   (lsp-deferred)
 			   (add-hook 'before-save-hook 'gofmt-before-save t t)
-			   (remove-hook 'before-save-hook 'lsp--before-save t t))))
+			   (remove-hook 'before-save-hook 'lsp--before-save t))))
 
 (setq js2-include-node-externs t)
