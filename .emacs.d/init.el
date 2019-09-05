@@ -326,3 +326,6 @@
 			   (remove-hook 'before-save-hook 'lsp--before-save t))))
 
 (setq js2-include-node-externs t)
+
+;; Switch to the most recently selected buffer other than the current one.
+(global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
