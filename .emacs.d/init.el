@@ -15,7 +15,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Inconsolata for Powerline 16" nil t)
+(set-frame-font "Inconsolata 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
  					charset (font-spec :family "WenQuanYi Micro Hei" :size 22)))
@@ -329,3 +329,4 @@
 
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
+(sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
