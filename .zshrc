@@ -156,5 +156,5 @@ if [ -d ~/.zsh_plugins ]; then
   done
 fi
 
-
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

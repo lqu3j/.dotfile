@@ -17,8 +17,8 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
-Plug 'luochen1990/rainbow'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
 " The leader key
@@ -40,10 +40,10 @@ if has('persistent_undo')
 endif
 
 " Setting background, to adjust the default color scheme
-set background=dark
+set background=light
 
 " Using theme 
-colorscheme gruvbox
+colorscheme solarized
 
 " Show the line number relative to the line 
 set relativenumber
@@ -105,7 +105,7 @@ let g:gitgutter_enabled = 1
 
 " airline
 let g:airline_powerline_fonts = 0
-let g:airline_theme = "gruvbox"
+let g:airline_theme = "solarized"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 
@@ -124,7 +124,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler norelativenumber
 autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
 let g:fzf_layout= { 'down': '30%' }
 
-let g:rainbow_active = 1
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 " Automatically change the current directory

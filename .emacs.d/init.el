@@ -193,8 +193,10 @@
   (setq lsp-ui-sideline-show-code-actions nil)
   (setq lsp-ui-sideline-show-symbol nil)
   (setq lsp-ui-sideline-show-hover nil)
-  :bind(:map go-mode-map
-			 ("M-?" . lsp-ui-peek-find-references)))
+  (setq lsp-ui-peek-fontify 'always)
+  :bind(:map lsp-ui-mode-map
+			 ([remap xref-find-definitions] . 'lsp-ui-peek-find-definitions)
+			 ([remap xref-find-references] . 'lsp-ui-peek-find-references)))
 
 (use-package flycheck
   :ensure t)
@@ -218,6 +220,11 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+(use-package markdown-preview-mode
+  :ensure t
+  :config
+  (add-to-list 'markdown-preview-stylesheets "https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css"))
 
 (use-package avy
   :ensure
@@ -272,14 +279,19 @@
 
 (use-package web-mode
   :ensure t
-  :mode ("\\.html\\'" . web-mode))
+  :mode
+  ("\\.html\\'" . web-mode)
+  ("\\.tmpl\\'" . web-mode))
 
 (use-package js2-mode
   :ensure t
-  :mode ("\\.js\\'" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode)
+  :config(setq js2-mode-show-strict-warnings nil))
 
 (use-package web-beautify
-  :ensure t)
+  :ensure t
+  :config
+  (setq web-beautify-args '("-s" "2" "-f" "-")))
 
 (use-package json-mode
   :ensure t)
@@ -324,6 +336,7 @@
 			   (lsp-deferred)
 			   (add-hook 'before-save-hook 'gofmt-before-save t t)
 			   (remove-hook 'before-save-hook 'lsp--before-save t))))
+
 
 (setq js2-include-node-externs t)
 
