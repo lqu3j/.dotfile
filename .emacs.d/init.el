@@ -8,9 +8,8 @@
   (add-hook 'emacs-startup-hook
             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
 
-
-(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+  (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                           ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -67,7 +66,8 @@
   (setq company-tooltip-limit 5
 		company-idle-delay 0.1
 		company-echo-delay 0.1
-		company-minimum-prefix-length 2)
+		company-minimum-prefix-length 2
+		company-tooltip-align-annotations t)
   :bind(:map company-active-map
 			 ("C-n" . company-select-next)
 			 ("C-p" . company-select-previous)
@@ -211,6 +211,11 @@
   :config
   (setq gofmt-command "goimports"))
 
+(add-hook 'go-mode-hook
+			 (lambda()
+			   (lsp-deferred)
+			   (add-hook 'before-save-hook 'gofmt-before-save t t)))
+
 (use-package yasnippet
   :ensure t)
 
@@ -219,12 +224,9 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
-
-(use-package markdown-preview-mode
-  :ensure t
-  :config
-  (add-to-list 'markdown-preview-stylesheets "https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css"))
+  :init
+  (setq markdown-command "multimarkdown")
+  (setq markdown-css-paths '("http://thomasf.github.io/solarized-css/solarized-light.min.css")))
 
 (use-package avy
   :ensure
@@ -276,69 +278,67 @@
 (global-set-key (kbd "C-v") 'scroll-up-half)
 (global-set-key (kbd "M-v") 'scroll-down-half)
 
-
-(use-package web-mode
-  :ensure t
-  :mode
-  ("\\.html\\'" . web-mode)
-  ("\\.tmpl\\'" . web-mode))
-
-(use-package js2-mode
-  :ensure t
-  :mode ("\\.js\\'" . js2-mode)
-  :config(setq js2-mode-show-strict-warnings nil))
-
-(use-package web-beautify
-  :ensure t
-  :config
-  (setq web-beautify-args '("-s" "2" "-f" "-")))
-
 (use-package json-mode
   :ensure t)
 
-(use-package tern
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'" "\\.vue\\'" "\\.tmpl\\'")
+  :config
+  (setq web-mode-markup-indent-offset 2
+		web-mode-css-indent-offset 2
+		web-mode-code-indent-offset 2
+		web-mode-enable-current-element-highlight t
+		web-mode-enable-css-colorization t
+		web-mode-content-types-alist '(("vue" . "\\.vue\\'"))))
+
+(use-package company-web
   :ensure t)
 
-(use-package company-tern
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js\\'")
+  :config (setq js2-mode-show-strict-warnings nil))
+
+(use-package typescript-mode
+  :ensure t
+  :mode("\\.ts\\'"))
+
+(use-package tide
   :ensure t)
 
-(add-to-list 'company-backends 'company-tern)
-(setq company-tooltip-align-annotations t)
-(eval-after-load 'js2-mode
-  '(add-hook 'js2-mode-hook
-             (lambda ()
-			   (tern-mode)
-               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+(defun my/js-setup()
+  )
 
-(eval-after-load 'json-mode
-  '(add-hook 'json-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-js-buffer t t))))
+(defun my/web-vue-setup()
+  )
 
-(eval-after-load 'sgml-mode
-  '(add-hook 'html-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+(defun my/ts-setup()
+  )
 
-(eval-after-load 'web-mode
-  '(add-hook 'web-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-html-buffer t t))))
+(defun my/web-html-setup()
+  )
 
-(eval-after-load 'css-mode
-  '(add-hook 'css-mode-hook
-             (lambda ()
-               (add-hook 'before-save-hook 'web-beautify-css-buffer t t))))
+(add-hook 'js2-mode-hook
+		  (lambda()
+			(add-hook 'before-save-hook 'tide-format-before-save t t)
+			(setup-tide-mode)))
 
-(eval-after-load 'go-mode
-  '(add-hook 'go-mode-hook
-			 (lambda()
-			   (lsp-deferred)
-			   (add-hook 'before-save-hook 'gofmt-before-save t t)
-			   (remove-hook 'before-save-hook 'lsp--before-save t))))
+(add-hook 'typescript-mode-hook
+		  (lambda()
+			(add-hook 'before-save-hook 'tide-format-before-save t t)
+			(setup-tide-mode)))
 
+(add-hook 'web-mode-hook
+		  (lambda()
+			(setup-tide-mode)))
 
-(setq js2-include-node-externs t)
+(add-hook 'web-mode-hook (lambda()
+                           (cond ((equal web-mode-content-type "html")
+                                  (my/web-html-setup))
+                                 ((member web-mode-content-type '("vue"))
+                                  (my/web-vue-setup))
+                                 )))
 
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
