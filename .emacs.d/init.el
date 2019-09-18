@@ -342,3 +342,4 @@
 
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
+(sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
