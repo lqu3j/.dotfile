@@ -13,3 +13,4 @@
 #	proxy = socks5://127.0.0.1:1080
 [core]
 	editor = nvim
+	quotepath = false

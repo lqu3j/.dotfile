@@ -1,15 +1,17 @@
 ;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
-(when (version< emacs-version "27.0") (package-initialize))
-(setq debug-on-error t)
-
 (let ((normal-gc-cons-threshold (* 20 1024 1024))
       (init-gc-cons-threshold (* 128 1024 1024)))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'emacs-startup-hook
             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
 
-  (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                           ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq debug-on-error t)
+(setq package-check-signature nil)
+
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(unless package--initialized (package-initialize t))
+
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -17,7 +19,7 @@
 (set-frame-font "Inconsolata 16" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
- 					charset (font-spec :family "WenQuanYi Micro Hei" :size 22)))
+ 					charset (font-spec :family "ZhunYuan" :size 22)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
@@ -25,6 +27,12 @@
 (setq auto-save-default nil)
 ;; when startup, don't display modeline
 (setq mode-line-format nil)
+(prefer-coding-system 'utf-8)
+
+(setq company-backends
+	  '(company-files
+		company-keywords
+		company-capf))
 
 (add-hook 'emacs-startup-hook
 		  (lambda()
@@ -122,38 +130,15 @@
   (counsel-projectile-mode)
   (setq counsel-projectile-switch-project-action 'dired))
 
-(use-package solarized-theme
+(use-package monokai-theme
   :ensure t
   :config
-  (load-theme 'solarized-light t)
-  ;; make the fringe stand out from the background
-  (setq solarized-distinct-fringe-background t)
-
-  ;; Don't change the font for some headings and titles
-  (setq solarized-use-variable-pitch nil)
-
-  ;; make the modeline high contrast
-  (setq solarized-high-contrast-mode-line t)
-
-  ;; Use less bolding
-  (setq solarized-use-less-bold t)
-
-  ;; Use more italics
-  (setq solarized-use-more-italic t)
-
-  ;; Use less colors for indicators such as git:gutter, flycheck and similar
-  (setq solarized-emphasize-indicators nil)
-
-  ;; Don't change size of org-mode headlines (but keep other size-changes)
-  (setq solarized-scale-org-headlines nil)
-
-  ;; Avoid all font-size changes
-  (setq solarized-height-minus-1 1.0)
-  (setq solarized-height-plus-1 1.0)
-  (setq solarized-height-plus-2 1.0)
-  (setq solarized-height-plus-3 1.0)
-  (setq solarized-height-plus-4 1.0)
-  )
+  (load-theme 'monokai t)
+  (setq monokai-height-minus-1 1.0
+		monokai-height-plus-1 1.0
+		monokai-height-plus-2 1.0
+		monokai-height-plus-3 1.0
+		monokai-height-plus-4 1.0))
 
 (use-package multiple-cursors
   :ensure t
@@ -212,9 +197,10 @@
   (setq gofmt-command "goimports"))
 
 (add-hook 'go-mode-hook
-			 (lambda()
-			   (lsp-deferred)
-			   (add-hook 'before-save-hook 'gofmt-before-save t t)))
+		  (lambda()
+			(setq lsp-gopls-experimental-complete-unimported t)
+			(lsp-deferred)
+			(add-hook 'before-save-hook 'gofmt-before-save t t)))
 
 (use-package yasnippet
   :ensure t)
@@ -307,39 +293,50 @@
 (use-package tide
   :ensure t)
 
-(defun my/js-setup()
-  )
+(use-package prettier-js
+  :ensure t)
 
-(defun my/web-vue-setup()
-  )
+(defun my/js-setup()
+  (tide-setup)
+  (eldoc-mode +1)
+  (company-mode +1))
 
 (defun my/ts-setup()
-  )
+  (tide-setup)
+  (eldoc-mode +1)
+  (company-mode +1))
+
+(defun my/web-setup()
+  (cond ((equal web-mode-content-type "html")
+         (my/web-html-setup))
+        ((member web-mode-content-type '("vue"))
+         (my/web-vue-setup))))
+
+(defun my/web-vue-setup()
+  (tide-setup)
+  (eldoc-mode +1)
+  (company-mode +1))
 
 (defun my/web-html-setup()
-  )
+  (tide-setup)
+  (eldoc-mode +1)
+  (company-mode +1))
 
-(add-hook 'js2-mode-hook
-		  (lambda()
-			(add-hook 'before-save-hook 'tide-format-before-save t t)
-			(setup-tide-mode)))
-
-(add-hook 'typescript-mode-hook
-		  (lambda()
-			(add-hook 'before-save-hook 'tide-format-before-save t t)
-			(setup-tide-mode)))
-
-(add-hook 'web-mode-hook
-		  (lambda()
-			(setup-tide-mode)))
-
-(add-hook 'web-mode-hook (lambda()
-                           (cond ((equal web-mode-content-type "html")
-                                  (my/web-html-setup))
-                                 ((member web-mode-content-type '("vue"))
-                                  (my/web-vue-setup))
-                                 )))
+(add-hook 'js2-mode-hook 'my/js-setup)
+(add-hook 'typescript-mode-hook 'my/ts-setup)
+(add-hook 'web-mode-hook 'my/web-setup)
 
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
 (sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+
+(use-package graphviz-dot-mode
+  :ensure t)
+
+(use-package ggtags
+  :ensure t)
+
+(add-hook 'c-mode-common-hook
+		  (lambda()
+			(when (derived-mode-p 'c-mode 'c++-mode)
+			  (ggtags-mode 1))))

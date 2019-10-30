@@ -30,7 +30,7 @@ font pango:Misc Termsyn 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec xfce4-terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -173,11 +173,12 @@ gaps inner 10
 gaps outer 5
 
 # startup applications
+exec --no-startup-id compton -b
+exec --no-startup-id $HOME/.config/i3/bin/run.sh
 exec --no-startup-id fcitx
-exec --no-startup-id feh --bg-scale ~/pictures/simple.png
-exec --no-startup-id $HOME/.local/bin/autostart
-exec --no-startup-id compton --config ~/.config/compton.conf -b
+exec_always --no-startup-id sleep 0.5;feh --bg-tile ~/pictures/simple.jpg
 
 # set specific windows to floating mode
 for_window [class="Fcitx-config-gtk3"]              floating enable
 for_window [class="Lxappearance"]                   floating enable
+for_window [class="(G|g)oogle-chrome"]              border none
