@@ -5,11 +5,12 @@
   (add-hook 'emacs-startup-hook
             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
 
-(setq debug-on-error t)
+;;(setq debug-on-error t)
 (setq package-check-signature nil)
 
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(package-initialize)
 (unless package--initialized (package-initialize t))
 
 ;; set custom file in another place
@@ -102,7 +103,7 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :config (setq exec-path-from-shell '("PATH" "GOPATH" "LANG" "LC_CTYPE")))
+  :config (setq exec-path-from-shell '("PATH" "GOPATH" "LANG" "LC_CTYPE" "GO111MODULE")))
 
 (use-package smex
   :ensure t
@@ -188,6 +189,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
+  :hook(go-mode . lsp-deferred)
   :config
   (setq lsp-prefer-flymake nil))
 
@@ -196,11 +198,13 @@
   :config
   (setq gofmt-command "goimports"))
 
-(add-hook 'go-mode-hook
-		  (lambda()
-			(setq lsp-gopls-experimental-complete-unimported t)
-			(lsp-deferred)
-			(add-hook 'before-save-hook 'gofmt-before-save t t)))
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 (use-package yasnippet
   :ensure t)
@@ -340,3 +344,9 @@
 		  (lambda()
 			(when (derived-mode-p 'c-mode 'c++-mode)
 			  (ggtags-mode 1))))
+
+
+
+;; (use-package company-posframe
+;;   :ensure t)
+;; (company-posframe-mode 1)
