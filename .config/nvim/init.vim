@@ -4,7 +4,6 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'kien/ctrlp.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'airblade/vim-gitgutter'
@@ -13,6 +12,12 @@ Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
 
 call plug#end()
 
@@ -40,7 +45,7 @@ set number
 
 " Highlight cursor line
 set cursorline
-
+let g:gruvbox_contrast_dark='medium'
 set background=dark
 let g:gruvbox_invert_signs=0
 let g:gruvbox_sign_column='bg0'
@@ -93,3 +98,35 @@ if has('persistent_undo')
   set undofile
   set undodir=~/.config/vim/tmp/undo//
 endif
+
+
+" FZF config
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+nmap <Leader>b :Buffers<CR>
+" File, recent file
+nmap <Leader>fr :History<CR>
+" File, project file
+nmap <Leader>fp :GFiles<CR>
+" File, open file
+nmap <Leader>ff :Files<CR>
+nmap <Leader>/ :Ag<Space>
+
+nmap <M-?> :GoReferrers<CR>
+nmap <M-x> :Commands<CR>
+nmap <Leader>q :q<CR>
+
+set hidden
