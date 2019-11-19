@@ -18,6 +18,8 @@ Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'easymotion/vim-easymotion'
+Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
@@ -116,7 +118,7 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-nmap <Leader>b :Buffers<CR>
+nmap <Leader>bb :Buffers<CR>
 " File, recent file
 nmap <Leader>fr :History<CR>
 " File, project file
@@ -130,3 +132,9 @@ nmap <M-x> :Commands<CR>
 nmap <Leader>q :q<CR>
 
 set hidden
+set splitright
+
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+
+autocmd FileType help,fugitive wincmd L
