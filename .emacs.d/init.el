@@ -10,14 +10,13 @@
 
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-(package-initialize)
 (unless package--initialized (package-initialize t))
 
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Inconsolata 16" nil t)
+(set-frame-font "Input 15" nil t)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
  					charset (font-spec :family "ZhunYuan" :size 22)))
@@ -130,16 +129,6 @@
   :config
   (counsel-projectile-mode)
   (setq counsel-projectile-switch-project-action 'dired))
-
-(use-package monokai-theme
-  :ensure t
-  :config
-  (load-theme 'monokai t)
-  (setq monokai-height-minus-1 1.0
-		monokai-height-plus-1 1.0
-		monokai-height-plus-2 1.0
-		monokai-height-plus-3 1.0
-		monokai-height-plus-4 1.0))
 
 (use-package multiple-cursors
   :ensure t
@@ -271,82 +260,24 @@
 (use-package json-mode
   :ensure t)
 
-(use-package web-mode
-  :ensure t
-  :mode ("\\.html\\'" "\\.vue\\'" "\\.tmpl\\'")
-  :config
-  (setq web-mode-markup-indent-offset 2
-		web-mode-css-indent-offset 2
-		web-mode-code-indent-offset 2
-		web-mode-enable-current-element-highlight t
-		web-mode-enable-css-colorization t
-		web-mode-content-types-alist '(("vue" . "\\.vue\\'"))))
-
-(use-package company-web
-  :ensure t)
-
-(use-package js2-mode
-  :ensure t
-  :mode ("\\.js\\'")
-  :config (setq js2-mode-show-strict-warnings nil))
-
-(use-package typescript-mode
-  :ensure t
-  :mode("\\.ts\\'"))
-
-(use-package tide
-  :ensure t)
-
 (use-package prettier-js
   :ensure t)
-
-(defun my/js-setup()
-  (tide-setup)
-  (eldoc-mode +1)
-  (company-mode +1))
-
-(defun my/ts-setup()
-  (tide-setup)
-  (eldoc-mode +1)
-  (company-mode +1))
-
-(defun my/web-setup()
-  (cond ((equal web-mode-content-type "html")
-         (my/web-html-setup))
-        ((member web-mode-content-type '("vue"))
-         (my/web-vue-setup))))
-
-(defun my/web-vue-setup()
-  (tide-setup)
-  (eldoc-mode +1)
-  (company-mode +1))
-
-(defun my/web-html-setup()
-  (tide-setup)
-  (eldoc-mode +1)
-  (company-mode +1))
-
-(add-hook 'js2-mode-hook 'my/js-setup)
-(add-hook 'typescript-mode-hook 'my/ts-setup)
-(add-hook 'web-mode-hook 'my/web-setup)
 
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
 (sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
 
-(use-package graphviz-dot-mode
-  :ensure t)
 
-(use-package ggtags
-  :ensure t)
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold nil    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-gruvbox t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
-(add-hook 'c-mode-common-hook
-		  (lambda()
-			(when (derived-mode-p 'c-mode 'c++-mode)
-			  (ggtags-mode 1))))
-
-
-
-;; (use-package company-posframe
-;;   :ensure t)
-;; (company-posframe-mode 1)
+(setq js-indent-level 2)
