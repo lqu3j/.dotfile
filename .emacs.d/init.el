@@ -10,16 +10,20 @@
 
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+
 (unless package--initialized (package-initialize t))
 
 ;; set custom file in another place
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;; set font
-(set-frame-font "Input 15" nil t)
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
- 					charset (font-spec :family "ZhunYuan" :size 22)))
+
+(setq default-frame-alist '((font . "Input-15")))
+
+(if (display-graphic-p)
+	(dolist (charset '(kana han symbol cjk-misc bopomofo))
+	  (set-fontset-font (frame-parameter nil 'font)
+ 						charset (font-spec :family "ZhunYuan" :size 22))))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
@@ -178,9 +182,14 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook(go-mode . lsp-deferred)
+  :hook
+  (go-mode . lsp-deferred)
+  (js-mode . lsp-deferred)
+  (typescript-mode . lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil))
+  (setq lsp-prefer-flymake nil)
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
   :ensure t
@@ -189,11 +198,14 @@
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
+(defun lsp-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+(add-hook 'go-mode-hook #'lsp-install-save-hooks)
+(add-hook 'js-mode-hook #'lsp-install-save-hooks)
+(add-hook 'typescript-mode-hook #'lsp-install-save-hooks)
+
 
 (use-package yasnippet
   :ensure t)
@@ -260,9 +272,6 @@
 (use-package json-mode
   :ensure t)
 
-(use-package prettier-js
-  :ensure t)
-
 ;; Switch to the most recently selected buffer other than the current one.
 (global-set-key (kbd "C-c <tab>") 'mode-line-other-buffer)
 (sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
@@ -281,3 +290,8 @@
   (doom-themes-org-config))
 
 (setq js-indent-level 2)
+(use-package typescript-mode
+  :ensure t)
+
+(use-package better-defaults
+  :ensure t)

@@ -54,7 +54,7 @@ let g:gruvbox_sign_column='bg0'
 colorscheme gruvbox
 
 set shortmess+=c
-set completeopt-=preview
+set completeopt=menu,noinsert,noselect
 
 " vim-go
 let g:go_highlight_types = 1
@@ -79,7 +79,7 @@ nnoremap <leader>w :w<Cr>
 
 let g:deoplete#enable_at_startup = 1
 
-set completeopt-=preview
+set completeopt=longest,menuone
 set signcolumn=yes
 
 let g:echodoc#enable_at_startup = 1
@@ -137,4 +137,5 @@ set splitright
 nmap s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 
+set noswapfile
 autocmd FileType help,fugitive wincmd L

@@ -4,8 +4,8 @@ env:
 
 window:
   dimensions:
-    columns: 80
-    lines: 24
+    columns: 100
+    lines: 30
 
   padding:
     x: 0
@@ -27,18 +27,18 @@ tabspaces: 4
 
 font:
   normal:
-    family: Inconsolata
+    family: Input
     style: Regular
 
   bold:
-    family: Inconsolata
+    family: Input
     style: Regular
 
   italic:
-    family: Inconsolata
+    family: Input
     style: Italic
 
-  size: 16
+  size: 15
 
   offset:
     x: 0

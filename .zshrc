@@ -107,6 +107,7 @@ alias dotfile="cd ~/.dotfile"
 alias rsync="rsync -avcPz"
 alias vim="nvim"
 alias vimdiff="nvim -d"
+alias emc="emacsclient -d $DISPLAY"
 
 #if [[ "$SSH_AGENT_PID" == "" ]]; then
 	eval "$(<~/.ssh-agent-thing)"

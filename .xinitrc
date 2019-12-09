@@ -21,4 +21,4 @@ if [ -f "$userresources" ]; then
 fi
 
 source ~/.zshenv
-exec i3 > ~/.log/i3.log 2>&1
+exec ck-launch-session dbus-launch --sh-syntax --exit-with-session i3 > ~/.log/i3 2>&1
