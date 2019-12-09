@@ -35,8 +35,7 @@
 
 (setq company-backends
 	  '(company-files
-		company-keywords
-		company-capf))
+		company-keywords))
 
 (add-hook 'emacs-startup-hook
 		  (lambda()
@@ -184,12 +183,8 @@
   :commands (lsp lsp-deferred)
   :hook
   (go-mode . lsp-deferred)
-  (js-mode . lsp-deferred)
-  (typescript-mode . lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil)
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (setq lsp-prefer-flymake nil))
 
 (use-package go-mode
   :ensure t
@@ -203,8 +198,6 @@
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (add-hook 'go-mode-hook #'lsp-install-save-hooks)
-(add-hook 'js-mode-hook #'lsp-install-save-hooks)
-(add-hook 'typescript-mode-hook #'lsp-install-save-hooks)
 
 
 (use-package yasnippet
@@ -290,8 +283,22 @@
   (doom-themes-org-config))
 
 (setq js-indent-level 2)
+
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq typescript-indent-level 2))
 
 (use-package better-defaults
   :ensure t)
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save))
+  :config (setq tide-format-options '(:indentSize 2 :tabSize 2)))
