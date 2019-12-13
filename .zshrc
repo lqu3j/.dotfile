@@ -159,3 +159,5 @@ fi
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '

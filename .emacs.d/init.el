@@ -35,7 +35,8 @@
 
 (setq company-backends
 	  '(company-files
-		company-keywords))
+		company-keywords
+        company-capf))
 
 (add-hook 'emacs-startup-hook
 		  (lambda()
@@ -302,3 +303,35 @@
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save))
   :config (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+
+(use-package hl-todo
+  :ensure t
+  :config
+  (global-hl-todo-mode t))
+
+(use-package volatile-highlights
+  :ensure t
+  :config
+  (volatile-highlights-mode t))
+
+(use-package goto-chg
+  :ensure t)
+
+(use-package golden-ratio
+  :ensure t
+  :config (golden-ratio-mode 1))
+
+;; ediff
+(eval-after-load "golden-ratio"
+  '(progn
+     (add-to-list 'golden-ratio-exclude-modes "ediff-mode")
+     (add-to-list 'golden-ratio-inhibit-functions 'pl/ediff-comparison-buffer-p)))
+
+(defun pl/ediff-comparison-buffer-p ()
+  (and (boundp 'ediff-this-buffer-ediff-sessions)
+       ediff-this-buffer-ediff-sessions))
+
+(use-package company-statistics
+  :ensure t
+  :config
+  (company-statistics-mode))
