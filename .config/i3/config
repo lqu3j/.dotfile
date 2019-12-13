@@ -167,11 +167,11 @@ bindsym $mod+Shift+n scratchpad show
 
 default_border pixel 3
 default_floating_border normal
-popup_during_fullscreen leave_fullscreen
+# popup_during_fullscreen leave_fullscreen
 
 # i3-gaps
-smart_gaps on
-gaps inner 10
+# smart_gaps on
+gaps inner 5
 gaps outer 5
 
 focus_on_window_activation focus
