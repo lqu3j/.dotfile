@@ -6,34 +6,8 @@ Xft.hintstyle:  hintslight
 Xft.autohint:   false
 Xft.lcdfilter:  lcddefault
 
-Xcursor.theme: ComixCursors-Black
-Xcursor.size: 40
-
 Emacs.toolBar: off
 Emacs.menuBar: off
 Emacs.verticalScrollBars: off
 
-!! disable default bindings for Control-Shift
-URxvt.iso14755: false
-URxvt.iso14755_52: false
-
-URxvt.scrollBar: False
-
-URxvt.font: xft:Inconsolata for Powerline:pixelsize=23:antialias=true:hinting=full,xft:Symbola:pixelsize=17:antialias=true:hinting=full
-URxvt.boldFont: xft:Inconsolata for Powerline:style=bold:pixelsize=23:antialias=true:hinting=full,xft:Symbola:pixelsize=17:antialias=true:hinting=full
-
-!! scroll
-!! do not scroll with output
-URxvt*scrollTtyOutput:      false
-!! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
-URxvt*scrollWithBuffer:     true
-!! scroll back to the bottom on keypress
-URxvt*scrollTtyKeypress:    true
-
-!! scrollback buffer
-URxvt.secondaryScreen:  1
-URxvt.secondaryScroll:  0
-URxvt.secondaryWheel:   1
-URxvt.letterSpace: 1
-URxvt.keysym.Shift-Control-V: eval:paste_clipboard
-URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+Xcursor.size: 30

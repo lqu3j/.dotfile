@@ -1,16 +1,18 @@
 [user]
-	name = lqu3j
+	name = lx
 	email = lqu3qf@gmail.com
 [credential]
 	helper = store
-#[url "gogs@git.algor.tech:"]
-#	insteadOf = https://git.algor.tech/
-#[url "git@git.wannafilm.com:"]
-#	insteadOf = https://git.wannafilm.com
-#[http]
-#	proxy = socks5://127.0.0.1:1080
-#[https]
-#	proxy = socks5://127.0.0.1:1080
 [core]
 	editor = nvim
 	quotepath = false
+[url "https://git.zx-tech.net"]
+	insteadOf = https://git.algor.tech
+[url "http://git.zx-tech.net"]
+	insteadOf = https://git.zx-tech.net
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[pull]
+	rebase = true
+[init]
+	defaultBranch = master

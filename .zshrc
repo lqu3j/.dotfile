@@ -23,7 +23,7 @@ export ZSH=~/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="spaceship"
+ZSH_THEME="afowler"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -33,7 +33,7 @@ ZSH_THEME="spaceship"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="false"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -69,6 +69,7 @@ ENABLE_CORRECTION="false"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git z colored-man-pages zsh-autosuggestions)
 
+DISABLE_MAGIC_FUNCTIONS=true
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -105,13 +106,10 @@ alias tattach="tmux attach"
 alias tls="tmux ls"
 alias dotfile="cd ~/.dotfile"
 alias rsync="rsync -avcPz"
-alias vim="nvim"
-alias vimdiff="nvim -d"
+# alias vim="nvim"
+# alias vimdiff="nvim -d"
 alias emc="emacsclient -d $DISPLAY"
 
-#if [[ "$SSH_AGENT_PID" == "" ]]; then
-	eval "$(<~/.ssh-agent-thing)"
-#fi
 #cd /home/woocat/workspace/programming/go/src/git.wannafilm.com/luoxin
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
@@ -131,25 +129,7 @@ _fzf_compgen_dir() {
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-ssh() {
-    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux: server" ]; then
-        tmux rename-window "$(echo $* | awk '{print $NF}')"
-        command ssh -A "$@"
-        tmux set-window-option automatic-rename "on" 1>/dev/null
-    else
-        command ssh -A "$@"
-    fi
-}
 
-pssh() {
-    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux: server" ]; then
-        tmux rename-window "$(echo $* | awk '{print $NF}')"
-        command proxychains -q ssh -A "$@"
-        tmux set-window-option automatic-rename "on" 1>/dev/null
-    else
-        command proxychains -q ssh -A "$@"
-    fi
-}
 
 if [ -d ~/.zsh_plugins ]; then
   for file in ~/.zsh_plugins/*.sh; do
@@ -157,7 +137,25 @@ if [ -d ~/.zsh_plugins ]; then
   done
 fi
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3,bg=bold"
 
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+function vterm_printf(){
+    if [ -n "$TMUX" ]; then
+        # Tell tmux to pass the escape sequences through
+        # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+
+ssh() {
+    command ssh -t "$@" "which tmux && (tmux attach -t lx || tmux new -s lx) || bash -l"
+}
+
+alias vim="nvim"
+alias vi="nvim"
+alias gpbd="git push origin --delete"
