@@ -18,7 +18,6 @@ require'nvim-tree'.setup({
         height = 30,
         hide_root_folder = false,
         side = 'left',
-        auto_resize = true,
         mappings = {
             custom_only = false,
             list = {}
@@ -83,7 +82,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>zz', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>zz', opts)
-  buf_set_keymap('n', '<Leader>xx', '<cmd>Trouble<cr>', opts)
+  buf_set_keymap('n', '<Leader>xx', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
 end
 
 -- Setup lspconfig.
@@ -127,7 +126,7 @@ require('lualine').setup({
                  sources = { 'nvim_diagnostic' }
             },
         },
-        lualine_c = {{treelocation}}
+       lualine_c = {{treelocation}}
 
     },
     tabline = {},
@@ -144,6 +143,8 @@ cmp.setup({
       end,
     },
      mapping = {
+      ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+      ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
       ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
       ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
       ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
@@ -174,10 +175,6 @@ cmp.setup({
       end
     })
     },
-
-    experimental = {
-        ghost_text = true,
-    },
 })
 
 function goimports(wait_ms)
@@ -187,7 +184,7 @@ function goimports(wait_ms)
   for _, res in pairs(result or {}) do
     for _, r in pairs(res.result or {}) do
       if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit)
+        vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
       else
         vim.lsp.buf.execute_command(r.command)
       end
