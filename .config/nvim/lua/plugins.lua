@@ -1,7 +1,7 @@
 return require('packer').startup(function()
 	use 'wbthomason/packer.nvim'
     use 'neovim/nvim-lspconfig'
-    use 'nvim-treesitter/nvim-treesitter'
+    use {'nvim-treesitter/nvim-treesitter', commit='aadad4738e8453b3b0928ba0aa8f49b6878abace'}
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
