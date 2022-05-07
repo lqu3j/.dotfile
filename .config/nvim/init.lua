@@ -230,4 +230,3 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=Grey
 highlight GitGutterDelete guifg=#ff2222 ctermfg=Grey
 ]]
 vim.cmd[[hi CursorLineNr guifg=#BE2356 guibg=NONE]]
-require("telescope").load_extension "file_browser"

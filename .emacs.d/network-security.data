@@ -1,0 +1,4 @@
+;;;; -*- mode: lisp-data -*-
+(
+ (:id "sha1:5cce342a9a99ff6632dc081a41f5f4a28e8e10fc" :fingerprints ("sha1:e7:f1:93:1b:7c:54:a9:db:20:ad:c8:18:6d:9a:84:63:44:8e:94:17") :host "raw.githubusercontent.com:443" :conditions (:revocation-data-superseded :invalid :verify-cert))
+)
