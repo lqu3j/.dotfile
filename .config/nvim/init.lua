@@ -26,6 +26,11 @@ require'nvim-tree'.setup({
         relativenumber = false,
         signcolumn = "yes"
     },
+    update_focused_file = {
+        enable = true,
+        update_cwd = false,
+        ignore_list = {},
+    },
     actions = {
         change_dir = {
             global = false,
@@ -55,7 +60,7 @@ require'nvim-treesitter.configs'.setup {
 }
 
 vim.cmd[[autocmd VimEnter * highlight clear SignColumn]]
-vim.cmd[[command W :execute ':silent w !sudo tee % > /dev/null' | :edit!]]
+vim.cmd[[command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!]]
 
 vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fr', [[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
@@ -110,24 +115,17 @@ require('nvim-autopairs').setup({
 })
 
 vim.o.lazyredraw = true
+vim.g.nvim_tree_respect_buf_cwd = true
 
 require('lualine').setup({
     options = {theme = 'gruvbox'},
     sections = {
         lualine_b = {
-            {
-                'filename',
-                 path = 1,
-            },
-            'branch', 
-            'diff', 
-            {
-                'diagnostics',
-                 sources = { 'nvim_diagnostic' }
-            },
+            { 'filename', path = 1},
+            { 'diagnostics'},
         },
-       lualine_c = {{treelocation}}
-
+        lualine_c = {{treelocation}},
+        lualine_x = {'encoding', 'branch', 'filetype'},
     },
     tabline = {},
 })
@@ -232,3 +230,4 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=Grey
 highlight GitGutterDelete guifg=#ff2222 ctermfg=Grey
 ]]
 vim.cmd[[hi CursorLineNr guifg=#BE2356 guibg=NONE]]
+require("telescope").load_extension "file_browser"

@@ -29,4 +29,5 @@ return require('packer').startup(function()
     use 'akinsho/toggleterm.nvim'
     use 'airblade/vim-gitgutter'
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+    use { "nvim-telescope/telescope-file-browser.nvim" }
 end)
