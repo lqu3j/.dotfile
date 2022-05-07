@@ -618,3 +618,5 @@
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (cl-letf (((symbol-function #'process-list) (lambda ())))
     ad-do-it))
+
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
