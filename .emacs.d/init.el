@@ -65,14 +65,6 @@
   :ensure t
   :bind(("C-=" . er/expand-region)))
 
-(use-package projectile
-  :ensure t
-  :config (projectile-mode)
-  :bind
-  ("C-c p p" . projectile-switch-project)
-  ("C-c p s" . projectile-ripgrep)
-  ("C-c p f" . projectile-find-file))
-
 (use-package company
   :ensure t
   :hook (prog-mode . company-mode)
@@ -149,16 +141,9 @@
   :bind (("C-x b" . counsel-ibuffer)
 		 ("C-x C-r" . counsel-recentf)
 		 ("M-x" . counsel-M-x)
-		 ("C-c s" . counsel-rg))
+		 ("C-c C-s" . counsel-rg))
   :config
   (setq counsel-rg-base-command "rg --max-columns 500 --max-columns-preview --with-filename --no-heading --line-number --max-filesize 1M --color never %s"))
-
-
-(use-package counsel-projectile
-  :ensure t
-  :config
-  (counsel-projectile-mode)
-  (setq counsel-projectile-switch-project-action 'dired))
 
 (use-package multiple-cursors
   :ensure t
@@ -450,8 +435,6 @@
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode)))
 
-(set-face-background 'dired-directory nil)
-
 (global-set-key (kbd "C-c a") 'org-agenda)
 (setq org-agenda-files (list "~/Dropbox/org/todo.org"))
 
@@ -468,9 +451,6 @@
         try-expand-dabbrev-all-buffers     ; 搜索所有 buffer
         try-complete-file-name-partially   ; 文件名部分匹配
         try-complete-file-name))           ; 文件名匹配
-
-(set-face-background 'dired-directory nil )
-
 
 (use-package easy-kill
   :ensure t
@@ -502,7 +482,7 @@
 (define-key dired-mode-map "b" 'dired-up-directory)
 (define-key dired-mode-map "i" 'ido-find-file)
 
-(define-key go-mode-map (kbd "C-c C-s") 'lsp-ivy-workspace-symbol)
+(define-key go-mode-map (kbd "C-c s") 'lsp-ivy-workspace-symbol)
 
 ;; 解决daemon模式下,cursor颜色异常的BUG
 (require 'frame)
@@ -620,3 +600,22 @@
     ad-do-it))
 
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+(defun my/project-files-in-directory (dir)
+  "Use `fd' to list files in DIR."
+  (let* ((default-directory dir)
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (format "fd -H -t f -0 . %s" localdir)))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
+
+(cl-defmethod project-files ((project (head local)) &optional dirs)
+  "Override `project-files' to use `fd' in local projects."
+  (mapcan #'my/project-files-in-directory
+          (or dirs (list (project-root project)))))
+
+
+(with-eval-after-load 'project
+  (setq project-switch-commands 'project-find-file)
+  )

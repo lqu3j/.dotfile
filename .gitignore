@@ -33,3 +33,5 @@ transient/
 
 .emacs.d/url/cookies
 .emacs.d/undo
+.emacs.d/eshell/history
+.emacs.d/network-security.data
