@@ -25,7 +25,7 @@
              '(font . "InconsolataGo Nerd Font Mono 15"))
 
 (defun lx/set-font(&optional f)
-  (set-fontset-font "fontset-default" 'han (font-spec :family "ZhunYuan")))
+  (set-fontset-font "fontset-default" 'han (font-spec :family "Microsoft YaHei")))
 
 (add-hook 'after-make-frame-functions 'lx/set-font)
 (if (display-graphic-p)
