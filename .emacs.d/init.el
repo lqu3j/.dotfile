@@ -404,7 +404,7 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
-(setq dired-listing-switches "-Afhlv")
+(setq dired-listing-switches "-hlv")
 
 ;; 修改自 https://www.emacswiki.org/emacs/DiredOmitMode
 (define-advice dired-do-print (:override (&optional _))
