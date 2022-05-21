@@ -404,8 +404,6 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
-(setq dired-listing-switches "-hlv")
-
 ;; 修改自 https://www.emacswiki.org/emacs/DiredOmitMode
 (define-advice dired-do-print (:override (&optional _))
     "Show/hide dotfiles."
@@ -479,8 +477,10 @@
 
 (setq web-beautify-args '("-f" "-" "-s 2"))
 
-(define-key dired-mode-map "b" 'dired-up-directory)
-(define-key dired-mode-map "i" 'ido-find-file)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map "b" 'dired-up-directory)
+  (define-key dired-mode-map "i" 'ido-find-file)
+  (setq dired-listing-switches "-hlv"))
 
 (define-key go-mode-map (kbd "C-c s") 'lsp-ivy-workspace-symbol)
 
@@ -619,3 +619,4 @@
 (with-eval-after-load 'project
   (setq project-switch-commands 'project-find-file)
   )
+
