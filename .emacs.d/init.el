@@ -162,66 +162,22 @@
 ;; Is will not take effect config in use-package.
 (global-anzu-mode +1)
 
-(use-package flycheck
-  :ensure t
-  :config
-  (setq flycheck-check-syntax-automatically '(save mode-enabled)))
 
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-diagnostic-package :flycheck)
-  (setq lsp-log-io nil)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-enable-symbol-highlighting nil)
-  (setq lsp-enable-on-type-formatting nil)
-  (setq lsp-enable-folding nil)
-  (setq lsp-enable-text-document-color nil)
-  (setq lsp-enable-file-watchers nil)
-  (setq lsp-headerline-breadcrumb-enable t)
-  (setq lsp-gopls-use-placeholders t)
-  (setq lsp-gopls-hover-kind "NoDocumentation")
-  (setq lsp-completion-provider :none)
-  (setq lsp-eldoc-render-all nil)
-  (setq lsp-signature-render-documentation nil)
-  (setq lsp-signature-auto-activate t)
-  (setq lsp-idle-delay 0.1)
-  (setq lsp-completion--no-reordering t)
-  (setq lsp-modeline-code-actions-enable nil)
-  (setq lsp-modeline-diagnostics-enable nil)
-  (setq lsp-signature-auto-activate nil)
-  (setq lsp-enable-dap-auto-configure nil)
-  (setq lsp-enable-imenu nil)
-  (setq lsp-enable-indentation nil)
-  (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
-  :config
-  (with-eval-after-load 'lsp-mode
-    (setq lsp-modeline-diagnostics-scope :workspace))
-  (lsp-register-custom-settings
-   '(("gopls.completeUnimported" t t)
-     ("gopls.matcher" "CaseInsensitive")
-     ("gopls.hoverKind" "NoDocumentation")
-     ("gopls.staticcheck" t t)
-     ))
-  :bind(:map lsp-mode-map
-			 ([remap xref-find-definitions] . 'lsp-find-definition)
-			 ([remap xref-find-references] . 'lsp-find-references)))
-
+(defun eglot-organize-imports() (call-interactively 'eglot-code-action-organize-imports))
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+  (add-hook 'before-save-hook #'eglot-organize-imports))
 
 (add-hook 'go-mode-hook
           (lambda()
-            (lsp-deferred)
+            (eglot-ensure)
             (yas-minor-mode)
             (lsp-go-install-save-hooks)
             (setq compile-command "go build")
+            (setq eglot-ignored-server-capabilities '(:hoverProvider))
             ))
-
 
 (use-package go-mode
   :ensure t
@@ -448,9 +404,6 @@
   (setq company-posframe-show-indicator nil)
   (setq company-posframe-show-metadata nil))
 (company-posframe-mode 1)
-
-(add-hook 'c-mode-hook 'lsp-deferred)
-(add-hook 'js-mode-hook 'lsp-deferred)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -832,3 +785,14 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 
 (ido-mode -1)
+
+(use-package eglot
+  :ensure t)
+
+(setq-default eglot-workspace-configuration
+    '((:gopls .
+        ((staticcheck . t)
+         (matcher . "CaseInsensitive")
+         (hoverKind . "NoDocumentation")
+         (completeUnimported . t)
+         (usePlaceholders . t)))))

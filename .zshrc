@@ -153,7 +153,11 @@ function vterm_printf(){
 }
 
 ssh() {
-    command ssh -t "$@" "(which tmux && (tmux attach -t lx || tmux new -s lx) && tmux set prefix C-x) || bash -l"
+    if [ -z "$SSH_CONNECTION" ]; then
+        command ssh -t "$@" "which tmux && (tmux attach -t lx || tmux new -s lx) || bash -l"
+    else
+        command ssh -t "$@"
+    fi
 }
 
 alias vim="nvim"

@@ -21,7 +21,7 @@
 #     xrdb -merge "$userresources"
 # fi
 # 
-# source ~/.zshenv
-#exec dbus-launch --exit-with-session i3 
+source ~/.zshenv
+exec dbus-launch --exit-with-session i3 
 #exec dbs-launch --exit-with-session startplasma-x11
-exec startplasma-x11
+#exec startplasma-x11
