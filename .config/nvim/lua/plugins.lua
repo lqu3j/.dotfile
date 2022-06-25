@@ -13,6 +13,7 @@ return require('packer').startup(function()
     use 'tpope/vim-surround'
 	use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
 	use { 'nvim-telescope/telescope.nvim', requires = 'nvim-lua/plenary.nvim' }
+    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use 'nvim-telescope/telescope-project.nvim'
     use { 'hoob3rt/lualine.nvim', requires = 'kyazdani42/nvim-web-devicons' }
     use 'windwp/nvim-autopairs'
@@ -29,4 +30,5 @@ return require('packer').startup(function()
     use 'akinsho/toggleterm.nvim'
     use 'airblade/vim-gitgutter'
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+    use 'airblade/vim-rooter'
 end)

@@ -21,5 +21,4 @@ vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.updatetime = 100
 vim.o.cursorline = true
 vim.o.cursorlineopt = 'number'
-
 vim.cmd[[colorscheme gruvbox]]

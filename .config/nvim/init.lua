@@ -52,7 +52,7 @@ local function treelocation()
 end
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'lua', 'go', 'javascript'},
+  ensure_installed = {'lua', 'go', 'javascript', 'json'},
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -230,3 +230,36 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=Grey
 highlight GitGutterDelete guifg=#ff2222 ctermfg=Grey
 ]]
 vim.cmd[[hi CursorLineNr guifg=#BE2356 guibg=NONE]]
+
+require('telescope').setup{
+  defaults = {
+    vimgrep_arguments = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "--hidden",
+        "-M=1024",
+        "--max-columns-preview",
+        "-L",
+        "-P"
+    }
+  },
+  pickers = {
+  },
+  extensions = {
+      fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,  -- override the generic sorter
+          override_file_sorter = true,     -- override the file sorter
+          case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+      }
+  }
+}
+
+require('telescope').load_extension('fzf')
+
+vim.cmd("let g:rooter_patterns = ['.git', 'go.mod']")
