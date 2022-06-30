@@ -52,7 +52,7 @@ local function treelocation()
 end
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'lua', 'go', 'javascript', 'json'},
+  ensure_installed = {'lua', 'go', 'javascript', 'json','html'},
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -110,6 +110,17 @@ lsp.gopls.setup({
 
 })
 
+require'lspconfig'.tsserver.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+
+
+require'lspconfig'.vuels.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+
 require('nvim-autopairs').setup({
   disable_filetype = { "TelescopePrompt" , "vim"},
 })
@@ -127,7 +138,9 @@ require('lualine').setup({
         lualine_c = {{treelocation}},
         lualine_x = {'encoding', 'branch', 'filetype'},
     },
-    tabline = {},
+    tabline = {
+      lualine_a = {'buffers'},
+    },
 })
 require('Comment').setup()
 
@@ -241,12 +254,13 @@ require('telescope').setup{
         "--line-number",
         "--column",
         "--smart-case",
-        "--hidden",
-        "-M=1024",
-        "--max-columns-preview",
+       "--hidden",
+        "--glob=!.git/",
+        "--max-filesize=10M",
         "-L",
         "-P"
-    }
+    },
+    preview_cutoff = 120,
   },
   pickers = {
   },
@@ -263,3 +277,6 @@ require('telescope').setup{
 require('telescope').load_extension('fzf')
 
 vim.cmd("let g:rooter_patterns = ['.git', 'go.mod']")
+require'plenary.filetype'.add_file('tmpl')
+local parser = require"nvim-treesitter.parsers".filetype_to_parsername
+parser.template = "html" -- the someft filetype will use the python parser and queries.

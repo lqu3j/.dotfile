@@ -31,4 +31,6 @@ return require('packer').startup(function()
     use 'airblade/vim-gitgutter'
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
     use 'airblade/vim-rooter'
+    use 'editorconfig/editorconfig-vim'
+    use 'leafOfTree/vim-vue-plugin'
 end)

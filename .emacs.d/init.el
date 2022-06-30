@@ -1,10 +1,12 @@
 ;; init.el --- Load the full configuration -*- lexical-binding: t -*-
-(let ((normal-gc-cons-threshold (* 20 1024 1024))
-      (init-gc-cons-threshold (* 128 1024 1024)))
-  (setq gc-cons-threshold init-gc-cons-threshold)
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+(add-hook 'after-init-hook
+          #'(lambda ()
+              (setq gc-cons-threshold (* 100 1000 1000))))
+(add-hook 'focus-out-hook 'garbage-collect)
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+(run-with-idle-timer 5 t 'garbage-collect)
 (setq read-process-output-max (* 50 1024 1024))
 
 (setq debug-on-error nil)
@@ -90,11 +92,6 @@
   )
 (setq company-backends '(company-capf))
 
-
-(use-package rainbow-delimiters
-  :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
-
 (use-package smartparens
   :ensure t
   :config
@@ -134,6 +131,7 @@
 (use-package ivy-prescient
   :ensure t
   :config
+  (prescient-persist-mode)
   (ivy-prescient-mode +1))
 
 (use-package counsel
@@ -243,6 +241,16 @@
             (lsp-go-install-save-hooks)
             (setq compile-command "go build")
             ))
+
+(add-hook 'web-mode
+          (lambda ()
+            (lsp-deferred)
+            (define-key web-mode-map (kbd "C-c C-s") nil)))
+
+(add-hook 'js-mode-hook
+          (lambda ()
+            (lsp-deferred)
+            (define-key js-mode-map (kbd "M-.") nil)))
 
 
 (use-package go-mode
@@ -429,9 +437,9 @@
   (setq web-mode-enable-auto-closing t) ; enable auto close tag in text-mode
   (setq web-mode-enable-auto-pairing t)
   (setq web-mode-enable-css-colorization t)
-  (setq web-mode-markup-indent-offset 4)
-  (setq web-mode-code-indent-offset 4)
-  (setq web-mode-css-indent-offset 4)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode)))
 
@@ -619,3 +627,8 @@
   (setq project-switch-commands 'project-find-file)
   )
 
+
+(setq lsp-eslint-server-command 
+   '("node" 
+     "/home/lx/.vscode/extensions/dbaeumer.vscode-eslint-2.2.2/server/out/eslintServer.js" 
+     "--stdio"))

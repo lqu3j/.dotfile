@@ -153,7 +153,7 @@ function vterm_printf(){
 }
 
 ssh() {
-    if [ -z "$SSH_CONNECTION" ]; then
+    if [ -z "$TMUX" ]; then
         command ssh -t "$@" "which tmux && (tmux attach -t lx || tmux new -s lx) || bash -l"
     else
         command ssh -t "$@"

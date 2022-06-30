@@ -35,3 +35,4 @@ transient/
 .emacs.d/undo
 .emacs.d/eshell/history
 .emacs.d/network-security.data
+.emacs.d/var/prescient-save.el
