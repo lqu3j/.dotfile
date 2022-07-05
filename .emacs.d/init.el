@@ -90,7 +90,6 @@
 			 ("C-p" . company-select-previous)
 			 ("C-w" . nil))
   )
-(setq company-backends '(company-capf))
 
 (use-package smartparens
   :ensure t
@@ -632,3 +631,5 @@
    '("node" 
      "/home/lx/.vscode/extensions/dbaeumer.vscode-eslint-2.2.2/server/out/eslintServer.js" 
      "--stdio"))
+
+(setq company-backends '(company-files company-capf company-dabbrev-code))

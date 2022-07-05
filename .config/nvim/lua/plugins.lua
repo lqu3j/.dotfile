@@ -29,8 +29,15 @@ return require('packer').startup(function()
     use 'onsails/lspkind-nvim'
     use 'akinsho/toggleterm.nvim'
     use 'airblade/vim-gitgutter'
-    use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+    -- install without yarn or npm
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = function() vim.fn["mkdp#util#install"]() end,
+    })
+
     use 'airblade/vim-rooter'
     use 'editorconfig/editorconfig-vim'
     use 'leafOfTree/vim-vue-plugin'
+    use 'ray-x/go.nvim'
+    -- use 'nvim-orgmode/orgmode'
 end)
