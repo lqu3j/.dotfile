@@ -38,6 +38,6 @@ return require('packer').startup(function()
     use 'airblade/vim-rooter'
     use 'editorconfig/editorconfig-vim'
     use 'leafOfTree/vim-vue-plugin'
-    use 'ray-x/go.nvim'
+    use 'crispgm/nvim-go'
     -- use 'nvim-orgmode/orgmode'
 end)

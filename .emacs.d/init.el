@@ -364,16 +364,12 @@
 (use-package yaml-mode
   :ensure t)
 
-(setq org-todo-keywords '((sequence "TODO" "|" "DONE" "CANCEL")))
-
-
 ;; (with-eval-after-load 'org
 ;;   ()
 ;;   (add-hook 'org-mode-hook 'org-buffer-face-mode-variable)
 ;;   (add-hook 'org-agenda-mode-hook 'org-buffer-face-mode-variable))
 
 (global-set-key (kbd "C-c o") 'crux-open-with)
-
 
 (use-package ob-http
   :ensure t)
@@ -446,7 +442,7 @@
 (setq org-agenda-files (list "~/Dropbox/org/todo.org"))
 
 (setq org-todo-keywords
-      '((sequence "TODO(t!)" "NEXT(n!)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+      '((sequence "TODO(t)" "IN-PROGRESS(p!)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
 
 (use-package hl-todo
   :ensure t
@@ -633,3 +629,21 @@
      "--stdio"))
 
 (setq company-backends '(company-files company-capf company-dabbrev-code))
+
+(setq org-clock-in-switch-to-state "IN-PROGRESS")
+(setq org-clock-out-switch-to-state "WAIT")
+(setq org-clock-into-drawer t)
+(setq org-clock-persist t)
+(setq org-clock-persist-query-resume nil)
+(setq org-clock-persist-query-save nil)
+(setq org-clock-out-when-done t)
+
+;; (setq org-capture-templates
+;;       '(("w" "work-replated task" entry (file+headline "~/Dropbox/org/work.org" "todo list")
+;;          "* TODO %?\n  %i\n  %a")))
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/Dropbox/org/work.org" "todo list")
+         "* TODO %?\n  %i\n  %a")))
+
+      

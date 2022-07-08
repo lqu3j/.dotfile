@@ -6,6 +6,7 @@ vim.o.completeopt = 'menuone,noinsert,noselect'
 
 require'nvim-tree'.setup({
     update_cwd  = true,
+    respect_buf_cwd = true,
     view = {
         width = 30,
         height = 30,
@@ -119,7 +120,6 @@ require('nvim-autopairs').setup({
 })
 
 vim.o.lazyredraw = true
-vim.g.nvim_tree_respect_buf_cwd = true
 
 require('lualine').setup({
     options = {theme = 'gruvbox'},
@@ -130,9 +130,6 @@ require('lualine').setup({
         },
         lualine_c = {{treelocation}},
         lualine_x = {'encoding', 'branch', 'filetype'},
-    },
-    tabline = {
-      lualine_a = {'buffers'},
     },
 })
 require('Comment').setup()
@@ -270,4 +267,43 @@ vim.cmd("let g:rooter_patterns = ['.git', 'go.mod']")
 require'plenary.filetype'.add_file('tmpl')
 local parser = require"nvim-treesitter.parsers".filetype_to_parsername
 parser.template = "html" -- the someft filetype will use the python parser and queries.
-require('go').setup()
+
+vim.cmd[[
+    autocmd FileType go compiler go
+    autocmd QuickFixCmdPost [^l]* nested cwindow
+]]
+
+
+require('go').setup({
+    -- notify: use nvim-notify
+    notify = false,
+    -- auto commands
+    auto_format = false,
+    auto_lint = false,
+    -- linters: revive, errcheck, staticcheck, golangci-lint
+    linter = 'revive',
+    -- linter_flags: e.g., {revive = {'-config', '/path/to/config.yml'}}
+    linter_flags = {},
+    -- lint_prompt_style: qf (quickfix), vt (virtual text)
+    lint_prompt_style = 'qf',
+    -- formatter: goimports, gofmt, gofumpt
+    formatter = 'goimports',
+    -- test flags: -count=1 will disable cache
+    test_flags = {'-v'},
+    test_timeout = '30s',
+    test_env = {},
+    -- show test result with popup window
+    test_popup = true,
+    test_popup_auto_leave = false,
+    test_popup_width = 80,
+    test_popup_height = 10,
+    -- test open
+    test_open_cmd = 'edit',
+    -- struct tags
+    tags_name = 'json',
+    tags_options = {'json=omitempty'},
+    tags_transform = 'snakecase',
+    tags_flags = {'-skip-unexported'},
+    -- quick type
+    quick_type_flags = {'--just-types'},
+})
