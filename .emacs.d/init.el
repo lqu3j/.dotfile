@@ -630,20 +630,70 @@
 
 (setq company-backends '(company-files company-capf company-dabbrev-code))
 
-(setq org-clock-in-switch-to-state "IN-PROGRESS")
-(setq org-clock-out-switch-to-state "WAIT")
-(setq org-clock-into-drawer t)
 (setq org-clock-persist t)
-(setq org-clock-persist-query-resume nil)
-(setq org-clock-persist-query-save nil)
+(org-clock-persistence-insinuate)
+(setq org-clock-in-resume t)
+;; Save clock data and state changes and notes in the LOGBOOK drawer
+(setq org-clock-into-drawer t)
+;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+(setq org-clock-out-remove-zero-time-clocks t)
+;; Clock out when moving task to a done state
 (setq org-clock-out-when-done t)
 
-;; (setq org-capture-templates
-;;       '(("w" "work-replated task" entry (file+headline "~/Dropbox/org/work.org" "todo list")
-;;          "* TODO %?\n  %i\n  %a")))
+;; Enable auto clock resolution for finding open clocks
+(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+;; Include current clocking task in clock reports
+(setq org-clock-report-include-clocking-task t)
+
+
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/org/work.org" "todo list")
-         "* TODO %?\n  %i\n  %a")))
+         "* TODO %?\n  SCHEDULED: %t")))
 
-      
+(global-set-key (kbd "C-c c") #'org-capture)
+
+(add-hook 'org-after-todo-state-change-hook
+          (lambda ()
+            (when (string= org-state "IN-PROGRESS")
+              (org-clock-in)
+              )))
+
+(add-hook 'org-after-todo-state-change-hook
+          (lambda ()
+            (when (string= org-state "WAIT")
+              (org-clock-out)
+              )))
+
+(add-hook 'org-after-todo-state-change-hook
+          (lambda ()
+            (when (string= org-state "DONE")
+              (org-refile-to-datetree "/home/lx/Dropbox/org/journal.org")
+              )))
+
+
+(defun org-refile-to-datetree (&optional file)
+  "Refile a subtree to a datetree corresponding to it's timestamp.
+
+The current time is used if the entry has no timestamp. If FILE
+is nil, refile in the current file."
+  (interactive "f")
+  (let* ((datetree-date (or (org-entry-get nil "SCHEDULED" t)
+                            (org-read-date t nil "now")))
+         (date (org-date-to-gregorian datetree-date))
+         )
+    (with-current-buffer (current-buffer)
+      (save-excursion
+        (org-cut-subtree)
+        (if file (find-file file))
+        (org-datetree-find-date-create date)
+        (org-narrow-to-subtree)
+        (show-subtree)
+        (org-end-of-subtree t)
+        (newline)
+        (goto-char (point-max))
+        (org-paste-subtree 4)
+        (widen)
+        ))
+    )
+  )
