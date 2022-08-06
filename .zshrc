@@ -162,3 +162,4 @@ ssh() {
 alias vim="nvim"
 alias vi="nvim"
 alias gpbd="git push origin --delete"
+alias curl="curl -s"

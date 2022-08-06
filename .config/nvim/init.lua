@@ -46,7 +46,7 @@ local function treelocation()
 end
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'lua', 'go', 'javascript', 'json','html'},
+  ensure_installed = {'lua', 'go', 'javascript', 'json','html', 'pug'},
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -56,7 +56,7 @@ require'nvim-treesitter.configs'.setup {
 vim.cmd[[autocmd VimEnter * highlight clear SignColumn]]
 vim.cmd[[command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!]]
 
-vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files({hidden=true})<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fr', [[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fp', [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', [[<Cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
@@ -110,10 +110,10 @@ require'lspconfig'.tsserver.setup{
 }
 
 
-require'lspconfig'.vuels.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
+-- require'lspconfig'.vuels.setup{
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+-- }
 
 require('nvim-autopairs').setup({
   disable_filetype = { "TelescopePrompt" , "vim"},

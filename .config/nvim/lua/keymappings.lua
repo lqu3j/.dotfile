@@ -26,3 +26,7 @@ vim.api.nvim_set_keymap('x', 'K', ":move '<-2<CR>gv-gv", { noremap = true, silen
 
 vim.api.nvim_set_keymap('n', ']q', ':cnext<CR>zz', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '[q', ':cprevious<CR>zz', { noremap = true, silent = true })
+
+
+vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true, silent = true })

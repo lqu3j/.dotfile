@@ -40,4 +40,5 @@ return require('packer').startup(function()
     use 'leafOfTree/vim-vue-plugin'
     use 'crispgm/nvim-go'
     -- use 'nvim-orgmode/orgmode'
+    use 'altercation/vim-colors-solarized'
 end)

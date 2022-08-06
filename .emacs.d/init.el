@@ -125,7 +125,7 @@
   :ensure t
   :config
   (ivy-mode)
-  (setq ivy-use-virtual-buffers t))
+  (setq ivy-use-virtual-buffers t)))
 
 (use-package ivy-prescient
   :ensure t
@@ -135,14 +135,13 @@
 
 (use-package counsel
   :ensure t
-  :bind (("C-x b" . counsel-ibuffer)
+  :bind (("C-x b" . counsel-switch-buffer)
 		 ("C-x C-r" . counsel-recentf)
 		 ("M-x" . counsel-M-x)
 		 ("C-c C-s" . counsel-rg))
   :config
   (setq counsel-async-command-delay 0.25)
-  (setq counsel-rg-base-command `("rg" "-M" "1024" "--max-columns-preview" "-H" "-n" "--color" "never" "--no-heading"
-                                "-S" "--hidden" "-L" "-P" "%s" ".")))
+  (setq counsel-rg-base-command `("rg" "-M" "240" "--with-filename" "--no-heading" "--smart-case"  "--line-number" "--color" "never" "%s" ".")))
 
 (use-package multiple-cursors
   :ensure t
@@ -214,6 +213,7 @@
   (setq lsp-enable-imenu nil)
   (setq lsp-enable-indentation nil)
   (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
+  (setq lsp-vetur-format-enable nil)
   :config
   (with-eval-after-load 'lsp-mode
     (setq lsp-modeline-diagnostics-scope :workspace))
@@ -297,7 +297,6 @@
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'doom-one	 t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
   
@@ -625,27 +624,17 @@
 
 (setq lsp-eslint-server-command 
    '("node" 
-     "/home/lx/.vscode/extensions/dbaeumer.vscode-eslint-2.2.2/server/out/eslintServer.js" 
+     "/home/lx/.vscode/extensions/dbaeumer.vscode-eslint-2.2.6/server/out/eslintServer.js" 
      "--stdio"))
 
 (setq company-backends '(company-files company-capf company-dabbrev-code))
 
 (setq org-clock-persist t)
-(org-clock-persistence-insinuate)
+(setq org-clock-persist-query-resume nil)
+(setq org-clock-persist-query-save nil)
 (setq org-clock-in-resume t)
-;; Save clock data and state changes and notes in the LOGBOOK drawer
 (setq org-clock-into-drawer t)
-;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
-(setq org-clock-out-remove-zero-time-clocks t)
-;; Clock out when moving task to a done state
 (setq org-clock-out-when-done t)
-
-;; Enable auto clock resolution for finding open clocks
-(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
-;; Include current clocking task in clock reports
-(setq org-clock-report-include-clocking-task t)
-
-
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/Dropbox/org/work.org" "todo list")
@@ -665,20 +654,18 @@
               (org-clock-out)
               )))
 
-(add-hook 'org-after-todo-state-change-hook
-          (lambda ()
-            (when (string= org-state "DONE")
-              (org-refile-to-datetree "/home/lx/Dropbox/org/journal.org")
-              )))
+(define-key org-mode-map (kbd "C-c C-w") nil)
+(global-set-key (kbd "C-c C-w") #'org-refile-to-datetree)
 
 
-(defun org-refile-to-datetree (&optional file)
+(defun org-refile-to-datetree ()
   "Refile a subtree to a datetree corresponding to it's timestamp.
 
 The current time is used if the entry has no timestamp. If FILE
 is nil, refile in the current file."
-  (interactive "f")
-  (let* ((datetree-date (or (org-entry-get nil "SCHEDULED" t)
+  (interactive)
+  (let* ((file "~/Dropbox/org/journal.org")
+         (datetree-date (or (org-entry-get nil "SCHEDULED" t)
                             (org-read-date t nil "now")))
          (date (org-date-to-gregorian datetree-date))
          )
@@ -694,6 +681,25 @@ is nil, refile in the current file."
         (goto-char (point-max))
         (org-paste-subtree 4)
         (widen)
-        ))
-    )
-  )
+        ))))
+
+(use-package wgrep
+  :ensure t)
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+
+(use-package string-inflection
+  :ensure t)
+
+(use-package leuven-theme
+  :ensure t)
+
+(use-package modus-themes
+  :ensure t)
+
+
+(load-theme 'doom-solarized-light t)
