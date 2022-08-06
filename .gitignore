@@ -37,3 +37,5 @@ transient/
 .emacs.d/network-security.data
 .emacs.d/var/prescient-save.el
 /.emacs.d/org-clock-save.el
+
+.emacs.d/tramp
