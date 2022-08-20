@@ -8,8 +8,8 @@
 	quotepath = false
 [url "git@git.zx-tech.net:"]
 	insteadOf = https://git.algor.tech/
-[url "git@git.zx-tech.net:"]
-	insteadOf = https://git.zx-tech.net/
+; [url "git@git.zx-tech.net:"]
+; 	insteadOf = https://git.zx-tech.net/
 [url "git@github.com:"]
     insteadOf = https://github.com/
 [pull]

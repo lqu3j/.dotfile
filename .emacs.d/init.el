@@ -125,7 +125,7 @@
   :ensure t
   :config
   (ivy-mode)
-  (setq ivy-use-virtual-buffers t)))
+  (setq ivy-use-virtual-buffers t))
 
 (use-package ivy-prescient
   :ensure t

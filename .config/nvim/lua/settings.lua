@@ -9,7 +9,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.signcolumn = "yes"
 vim.o.backupcopy= "yes"
-vim.o.background = "light"
+vim.o.background = "dark"
 vim.o.autoread = true
 vim.o.termguicolors = true
 vim.o.ignorecase = true  -- Case insensitive search
@@ -23,4 +23,4 @@ vim.o.cursorline = true
 vim.o.cursorlineopt = 'number'
 vim.o.wrap = true
 vim.o.linebreak = true
-vim.cmd[[colorscheme solarized-flat]]
+vim.cmd[[colorscheme gruvbox]]
