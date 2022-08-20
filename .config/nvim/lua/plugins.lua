@@ -41,4 +41,8 @@ return require('packer').startup(function()
     use 'crispgm/nvim-go'
     -- use 'nvim-orgmode/orgmode'
     use 'altercation/vim-colors-solarized'
+
+    use { 'phaazon/hop.nvim', branch = 'v2'}
+
+    use "EdenEast/nightfox.nvim"
 end)

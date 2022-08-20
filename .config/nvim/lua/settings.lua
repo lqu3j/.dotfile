@@ -24,3 +24,4 @@ vim.o.cursorlineopt = 'number'
 vim.o.wrap = true
 vim.o.linebreak = true
 vim.cmd[[colorscheme gruvbox]]
+vim.o.guicursor="a:blinkwait5-blinkon5-blinkoff5"
