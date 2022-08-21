@@ -7,10 +7,10 @@ vim.api.nvim_set_keymap('n', '<Leader>h', ':set hlsearch!<CR>', { noremap = true
 vim.api.nvim_set_keymap('n', '<Leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- better window movement
-vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { silent = true })
-vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', { silent = true })
-vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { silent = true })
-vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { silent = true })
+vim.api.nvim_set_keymap('n', '<A-h>', '<C-w>h', { silent = true })
+vim.api.nvim_set_keymap('n', '<A-j>', '<C-w>j', { silent = true })
+vim.api.nvim_set_keymap('n', '<A-k>', '<C-w>k', { silent = true })
+vim.api.nvim_set_keymap('n', '<A-l>', '<C-w>l', { silent = true })
 
 -- better indenting
 vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true, silent = true })
@@ -24,9 +24,14 @@ vim.api.nvim_set_keymap('x', 'J', ":move '>+1<CR>gv-gv", { noremap = true, silen
 vim.api.nvim_set_keymap('x', 'K', ":move '<-2<CR>gv-gv", { noremap = true, silent = true })
 
 
-vim.api.nvim_set_keymap('n', ']q', ':cnext<CR>zz', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '[q', ':cprevious<CR>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', ']q', ':cnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '[q', ':cprevious<CR>', { noremap = true, silent = true })
 
 
 vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '*', '*N', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '#', '#n', { noremap = true, silent = true })
+
+
+vim.api.nvim_set_keymap('n', '<C-l>', ':<C-u>nohlsearch<CR><C-l>',{ noremap = true, silent = true })
