@@ -9,7 +9,6 @@ require'nvim-tree'.setup({
     respect_buf_cwd = true,
     view = {
         width = 30,
-        height = 30,
         hide_root_folder = false,
         side = 'left',
         mappings = {
@@ -85,7 +84,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 lsp.gopls.setup({
     on_attach = on_attach,
@@ -114,6 +113,8 @@ require'lspconfig'.tsserver.setup{
 --     on_attach = on_attach,
 --     capabilities = capabilities,
 -- }
+--
+require'lspconfig'.eslint.setup{}
 
 require('nvim-autopairs').setup({
   disable_filetype = { "TelescopePrompt" , "vim"},
@@ -225,9 +226,10 @@ function lazygit_toggle()
 end
 vim.api.nvim_set_keymap("n", "<Leader>g", "<cmd>lua lazygit_toggle()<CR>", {noremap = true, silent = true})
 vim.cmd[[
-highlight GitGutterAdd    guifg=#009900 ctermfg=Grey
-highlight GitGutterChange guifg=#bbbb00 ctermfg=Grey
-highlight GitGutterDelete guifg=#ff2222 ctermfg=Grey
+highlight GitGutterAdd            guifg=#009900 ctermfg=Grey
+highlight GitGutterChange         guifg=#bbbb00 ctermfg=Grey
+highlight GitGutterDelete         guifg=#ff2222 ctermfg=Grey
+highlight GitGutterChangeDelete   guifg=#8ec07c ctermfg=Grey
 ]]
 vim.cmd[[hi CursorLineNr guifg=#BE2356 guibg=NONE]]
 

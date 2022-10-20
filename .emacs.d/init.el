@@ -701,5 +701,13 @@ is nil, refile in the current file."
 (use-package modus-themes
   :ensure t)
 
+(use-package dracula-theme
+  :ensure t)
 
-(load-theme 'doom-solarized-light t)
+(load-theme 'doom-dracula t)
+
+(defun counsel-rg-project (dir)
+  (interactive (list (project-prompt-project-dir)))
+  (counsel-rg "" dir)
+  )
+(global-set-key (kbd "C-x p s") 'counsel-rg-project)

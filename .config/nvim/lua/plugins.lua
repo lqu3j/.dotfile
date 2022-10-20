@@ -1,7 +1,7 @@
 return require('packer').startup(function()
 	use 'wbthomason/packer.nvim'
     use 'neovim/nvim-lspconfig'
-    use {'nvim-treesitter/nvim-treesitter', commit='aadad4738e8453b3b0928ba0aa8f49b6878abace'}
+    use {'nvim-treesitter/nvim-treesitter', run = function() require('nvim-treesitter.install').update({ with_sync = true }) end}
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
@@ -12,7 +12,7 @@ return require('packer').startup(function()
     use 'f-person/git-blame.nvim'
     use 'tpope/vim-surround'
 	use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
-	use { 'nvim-telescope/telescope.nvim', requires = 'nvim-lua/plenary.nvim' }
+	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = 'nvim-lua/plenary.nvim' }
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use 'nvim-telescope/telescope-project.nvim'
     use { 'hoob3rt/lualine.nvim', requires = 'kyazdani42/nvim-web-devicons' }
