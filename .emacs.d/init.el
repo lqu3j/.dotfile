@@ -184,10 +184,6 @@
 (use-package go-mode
   :ensure t)
 
-(use-package yasnippet
-  :ensure t
-  :commands yas-minor-mode)
-
 (use-package markdown-mode
   :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
@@ -543,6 +539,7 @@
   )
 
 (setq company-backends '(company-files company-capf company-dabbrev-code))
+(setq completion-ignore-case t)
 (setq org-clock-persist t)
 (setq org-clock-persist-query-resume nil)
 (setq org-clock-persist-query-save nil)
@@ -630,7 +627,7 @@ is nil, refile in the current file."
 (use-package eglot
   :ensure t)
 
-(add-hook 'go-mode-hook 'eglot-ensure)
+
 
 ;; Optional: install eglot-format-buffer as a save hook.
 ;; The depth of -10 places this before eglot's willSave notification,
@@ -648,3 +645,20 @@ is nil, refile in the current file."
   (cdr project))
 
 (add-hook 'project-find-functions #'project-find-go-module)
+
+(setq-default eglot-workspace-configuration
+              '((:gopls .
+                        ((matcher . "CaseInsensitive")
+                         (usePlaceholders . t)
+                         (hoverKind . "NoDocumentation")
+                         ))))
+
+(setq eldoc-echo-area-use-multiline-p nil)
+(use-package yasnippet
+  :defer 15 ;; takes a while to load, so do it async
+  :diminish yas-minor-mode
+  :config (yas-global-mode)
+  :custom (yas-prompt-functions '(yas-completing-prompt)))
+
+(add-hook 'go-mode-hook #'yas-minor-mode)
+(add-hook 'go-mode-hook #'eglot-ensure)
