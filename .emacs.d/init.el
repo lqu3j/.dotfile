@@ -679,11 +679,18 @@ is nil, refile in the current file."
 
 (setq eldoc-echo-area-use-multiline-p nil)
 (use-package yasnippet
+  :ensure t
   :defer 15 ;; takes a while to load, so do it async
   :diminish yas-minor-mode
-  :config (yas-global-mode)
   :custom (yas-prompt-functions '(yas-completing-prompt)))
 
-(add-hook 'go-mode-hook #'yas-minor-mode)
-(add-hook 'go-mode-hook #'eglot-ensure)
-(add-hook 'go-mode-hook #'eglot-format-buffer-on-save)
+;; (add-hook 'go-mode-hook #'yas-minor-mode)
+;; (add-hook 'go-mode-hook #'eglot-ensure)
+;; (add-hook 'go-mode-hook #'eglot-format-buffer-on-save)
+(add-hook 'go-mode-hook
+          (lambda()
+            (yas-minor-mode)
+            (eglot-ensure)
+            (eglot-format-buffer-on-save)
+            (setq compile-command "go build")
+            ))
