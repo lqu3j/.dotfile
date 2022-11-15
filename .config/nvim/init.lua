@@ -291,7 +291,7 @@ require('go').setup({
     -- formatter: goimports, gofmt, gofumpt
     formatter = 'goimports',
     -- test flags: -count=1 will disable cache
-    test_flags = {'-v'},
+    test_flags = {'-v', "-count=1"},
     test_timeout = '30s',
     test_env = {},
     -- show test result with popup window

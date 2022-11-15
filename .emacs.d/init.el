@@ -489,7 +489,7 @@
 
 
 (add-to-list 'display-buffer-alist
-             '("^\\*Flycheck"
+             '("^\\*Flymake"
 	           (display-buffer-reuse-window
 	            display-buffer-in-side-window)
 	           (reusable-frames . visible)
@@ -528,11 +528,11 @@
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
 
-(cl-defmethod project-files ((project (head local)) &optional dirs)
+
+(cl-defgeneric project-files (project &optional dirs)
   "Override `project-files' to use `fd' in local projects."
   (mapcan #'my/project-files-in-directory
           (or dirs (list (project-root project)))))
-
 
 (with-eval-after-load 'project
   (setq project-switch-commands 'project-find-file)
@@ -694,3 +694,5 @@ is nil, refile in the current file."
             (eglot-format-buffer-on-save)
             (setq compile-command "go build")
             ))
+
+(global-set-key (kbd "C-c d") 'flymake-show-project-diagnostics)
