@@ -4,35 +4,7 @@ require('settings')
 
 vim.o.completeopt = 'menuone,noinsert,noselect'
 
-require'nvim-tree'.setup({
-    update_cwd  = true,
-    respect_buf_cwd = true,
-    view = {
-        width = 30,
-        hide_root_folder = false,
-        side = 'left',
-        mappings = {
-            custom_only = false,
-            list = {}
-        },
-        number = false,
-        relativenumber = false,
-        signcolumn = "yes"
-    },
-    update_focused_file = {
-        enable = true,
-        update_cwd = false,
-        ignore_list = {},
-    },
-    actions = {
-        change_dir = {
-            global = false,
-        },
-        open_file = {
-            quit_on_open = false,
-        }
-    }
-})
+require'nvim-tree'.setup()
 
 local treesitter = require('nvim-treesitter')
 
@@ -84,7 +56,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 lsp.gopls.setup({
     on_attach = on_attach,
@@ -92,7 +64,7 @@ lsp.gopls.setup({
     init_options = {
         usePlaceholders = true,
     },
-    root_dir = util.root_pattern("go.mod", ".git"),
+    root_dir = util.root_pattern(".git"),
     settings = {
         -- gopls = {
         --     analyses = {
@@ -166,17 +138,18 @@ cmp.setup({
       { name = 'path'},
     }),
   formatting = {
-    format = lspkind.cmp_format({
-      mode = 'symbol', -- show only symbol annotations
-      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-
-      -- The function below will be called before any actual modifications from lspkind
-      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-      before = function (entry, vim_item)
-        return vim_item
+    format = function(entry, vim_item)
+      if vim.tbl_contains({ 'path' }, entry.source.name) then
+        local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
+        if icon then
+          vim_item.kind = icon
+          vim_item.kind_hl_group = hl_group
+          return vim_item
+        end
       end
-    })
-    },
+      return require('lspkind').cmp_format({ with_text = true })(entry, vim_item)
+    end
+  },
 })
 
 function goimports(wait_ms)

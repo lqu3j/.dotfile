@@ -39,3 +39,4 @@ transient/
 /.emacs.d/org-clock-save.el
 
 .emacs.d/tramp
+.emacs.d/tutorial/Chinese-GBK.tut

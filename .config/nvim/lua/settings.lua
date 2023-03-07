@@ -24,5 +24,5 @@ vim.o.cursorlineopt = 'number'
 vim.o.wrap = true
 vim.o.linebreak = true
 vim.o.mouse = ''
-vim.cmd[[colorscheme gruvbox]]
+vim.cmd[[colorscheme NeoSolarized]]
 vim.o.guicursor="a:blinkwait5-blinkon5-blinkoff5"

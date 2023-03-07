@@ -7,6 +7,9 @@ export GOSUMDB=off
 export CGO_ENABLED=0
 export GOINSECURE="git.algor.tech"
 export PATH=$PATH:$GOPATH/bin:~/.local/bin:~/.fzf/bin/:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.local/bin:$DENO_INSTALL/bin:$PATH
-export FZF_DEFAULT_OPTS="--layout=reverse --inline-info --color=gutter:#282828,bg+:6" 
+export FZF_DEFAULT_OPTS="--layout=reverse --inline-info --color=gutter:#002B36,bg+:6" 
 export TERM=xterm-256color
 export EDITOR=nvim
+export NALI_DB_IP4=ip2location
+export NALI_DB_IP6=ip2location
+

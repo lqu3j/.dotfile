@@ -162,4 +162,5 @@ ssh() {
 alias vim="nvim"
 alias vi="nvim"
 alias gpbd="git push origin --delete"
-alias curl="curl -s"
+alias curl="curl -s --compressed"
+export TERM=xterm-256color

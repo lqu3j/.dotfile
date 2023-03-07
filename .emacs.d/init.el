@@ -71,8 +71,8 @@
   :ensure t
   :hook (prog-mode . company-mode)
   :init
-  (setq company-idle-delay 0
-        company-tooltip-idle-delay 0
+  (setq company-idle-delay 0.1
+        company-tooltip-idle-delay 0.1
         company-echo-delay 0
 		company-minimum-prefix-length 2
 		company-tooltip-align-annotations t
@@ -201,18 +201,10 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
-(setq doom-modeline-env-version t)
-(setq doom-modeline-env-enable-go t)
-(setq doom-modeline-env-go-executable "go")
-(setq doom-modeline-workspace-name t)
-(setq doom-modeline-icon nil)
-(setq doom-modeline-buffer-file-name-style 'auto)
-(setq doom-modeline-buffer-modification-icon t)
+(setq doom-modeline-buffer-file-name-style 'truncate-upto-root)
 (setq doom-modeline-buffer-encoding t)
-(setq doom-modeline-env-load-string "...")
 (setq doom-modeline-before-update-env-hook nil)
 (setq doom-modeline-after-update-env-hook nil)
-
 
 (use-package doom-themes
   :ensure t
@@ -388,13 +380,13 @@
 (use-package go-tag
   :ensure t)
 
-(use-package company-posframe
-  :ensure t
-  :init
-  (setq company-posframe-quickhelp-delay nil)
-  (setq company-posframe-show-indicator nil)
-  (setq company-posframe-show-metadata nil))
-(company-posframe-mode 1)
+;; (use-package company-posframe
+;;   :ensure t
+;;   :init
+;;   (setq company-posframe-quickhelp-delay nil)
+;;   (setq company-posframe-show-indicator nil)
+;;   (setq company-posframe-show-metadata nil))
+;; (company-posframe-mode 1)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -615,7 +607,7 @@ is nil, refile in the current file."
 (use-package dracula-theme
   :ensure t)
 
-(load-theme 'doom-dracula t)
+(load-theme 'doom-gruvbox t)
 
 (defun counsel-rg-project (dir)
   (interactive (list (project-prompt-project-dir)))
@@ -652,15 +644,6 @@ is nil, refile in the current file."
            (eglot--dbind ((Command) command arguments) command
              (eglot-execute-command server (intern command) arguments))))))))
 
-
-;; Optional: install eglot-format-buffer as a save hook.
-;; The depth of -10 places this before eglot's willSave notification,
-;; so that that notification reports the actual contents that will be saved.
-(defun eglot-format-buffer-on-save ()
-  (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
-  (add-hook 'before-save-hook #'eglot-organize-imports 30 t))
-
-
 (defun project-find-go-module (dir)
   (when-let ((root (locate-dominating-file dir "go.mod")))
     (cons 'go-module root)))
@@ -684,15 +667,82 @@ is nil, refile in the current file."
   :diminish yas-minor-mode
   :custom (yas-prompt-functions '(yas-completing-prompt)))
 
-;; (add-hook 'go-mode-hook #'yas-minor-mode)
-;; (add-hook 'go-mode-hook #'eglot-ensure)
-;; (add-hook 'go-mode-hook #'eglot-format-buffer-on-save)
-(add-hook 'go-mode-hook
-          (lambda()
-            (yas-minor-mode)
-            (eglot-ensure)
-            (eglot-format-buffer-on-save)
-            (setq compile-command "go build")
-            ))
+(defun lx/eglot-organize-imports ()
+  (eglot-code-actions nil nil "source.organizeImports" t))
 
-(global-set-key (kbd "C-c d") 'flymake-show-project-diagnostics)
+(defun lx/go-mode-hook ()
+  (yas-minor-mode)
+  (eglot-ensure)
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+  (add-hook 'before-save-hook #'lx/eglot-organize-imports 10 t)
+  (setq go-test-args "--count=1")
+  (setq compile-command "go build"))
+
+(add-hook 'go-mode-hook #'lx/go-mode-hook)
+(define-key flymake-mode-map (kbd "C-c d") 'flymake-show-project-diagnostics)
+(define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+
+(use-package markdown-preview-mode
+  :ensure t)
+(setq markdown-command "/usr/bin/pandoc")
+
+(setq inhibit-automatic-native-compilation nil)
+
+
+(defun parse-url (url)
+  "convert a git remote location as a HTTP URL"
+  (if (string-match "^http" url)
+      url
+    (replace-regexp-in-string "\\(.*\\)@\\(.*\\):\\(.*\\)\\(\\.git?\\)"
+                              "https://\\2/\\3"
+                              url)))
+(defun magit-open-repo ()
+  "open remote repo URL"
+  (interactive)
+  (magit-copy-section-value 0)
+  (let ((url (concat (magit-get "remote" "origin" "url") "/commit/" (car kill-ring))))
+    (progn
+      (browse-url (parse-url url))
+      (message "opening repo %s" url))))
+
+
+
+(add-hook 'magit-log-mode-hook
+          (lambda ()
+            (local-set-key (kbd "o") 'magit-open-repo)))
+
+
+
+
+;; Sample jar configuration
+(setq plantuml-jar-path "/usr/share/plantuml/lib/plantuml.jar")
+(setq org-plantuml-jar-path "/usr/share/plantuml/lib/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+(setq plantuml-output-type "png")
+;; Sample executable configuration
+(setq plantuml-default-exec-mode 'executable)
+
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml . t))) ; this line activates plantuml
+
+(use-package ivy-rich
+  :ensure t
+  :config
+  (ivy-rich-mode))
+
+(ivy-rich-set-columns
+ 'ivy-switch-buffer
+ '(
+   (ivy-rich-switch-buffer-indicators (:width 1 :face error :align left))
+   (ivy-switch-buffer-transformer (:width 0.3))
+   (ivy-rich-switch-buffer-size (:width 7))
+   (ivy-rich-switch-buffer-path (:width 0.5))
+   ))
+
+
+(setq ivy-rich-path-style 'abbrev)
+
+
+(setq dired-dwim-target t)

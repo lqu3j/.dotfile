@@ -45,4 +45,5 @@ return require('packer').startup(function()
     use { 'phaazon/hop.nvim', branch = 'v2'}
 
     use "EdenEast/nightfox.nvim"
+    use "overcache/NeoSolarized"
 end)
