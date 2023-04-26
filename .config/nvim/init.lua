@@ -27,12 +27,13 @@ require'nvim-treesitter.configs'.setup {
 vim.cmd[[autocmd VimEnter * highlight clear SignColumn]]
 vim.cmd[[command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!]]
 
-vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files({hidden=true})<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>fr', [[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>fp', [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>fg', [[<Cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>fb', [[<Cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true }) 
-vim.api.nvim_set_keymap('n','<C-p>',":lua require'telescope'.extensions.project.project{}<CR>",{noremap = true, silent = true})
+
+require('telescope.themes').get_ivy({})
+vim.api.nvim_set_keymap('n', '<Leader>ff', [[<Cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<CR>]],  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fr', [[<Cmd>lua require('telescope.builtin').oldfiles(require('telescope.themes').get_ivy({}))<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fg', [[<Cmd>lua require('telescope.builtin').live_grep(require('telescope.themes').get_ivy({}))<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>fb', [[<Cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_ivy({}))<CR>]], { noremap = true, silent = true }) 
+vim.api.nvim_set_keymap('n','<C-p>',[[<Cmd>lua require('telescope').extensions.repo.list(require('telescope.themes').get_ivy({}))<CR>]],{noremap = true, silent = true})
 
 local lsp = require('lspconfig')
 local util = require('lspconfig/util')
@@ -46,6 +47,7 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   local opts = { noremap=true, silent=true }
 
+  require "lsp_signature".on_attach(signature_setup, bufnr)
   buf_set_keymap('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<Leader>fs', [[<Cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<CR>]], opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
@@ -64,7 +66,7 @@ lsp.gopls.setup({
     init_options = {
         usePlaceholders = true,
     },
-    root_dir = util.root_pattern(".git"),
+    root_dir = lsp.util.root_pattern('.git'),
     settings = {
         -- gopls = {
         --     analyses = {
@@ -169,7 +171,6 @@ function goimports(wait_ms)
 end
 vim.api.nvim_exec([[ autocmd BufWritePre *.go :silent! lua goimports(1000) ]], false)
 
-
 vim.cmd[[highlight CmpItemAbbrMatch guibg=NONE guifg=Grey ]]
 vim.cmd[[imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
 vim.cmd[[smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>']]
@@ -222,20 +223,37 @@ require('telescope').setup{
         "-L",
         "-P"
     },
-    preview_cutoff = 120,
+    preview = {
+        treesitter = false,
+        hide_on_startup = true,
+    },
   },
   pickers = {
+      find_files = {
+          find_command = { "fd", "-H", "-I" },
+      },
   },
   extensions = {
-      fzf = {
-          fuzzy = true,
-          override_generic_sorter = true,  -- override the generic sorter
-          override_file_sorter = true,     -- override the file sorter
-          case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-      }
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+    },
+    repo = {
+      list = {
+        fd_opts = {
+          "-I",
+        },
+        search_dirs = {
+          "/home/lx/projects",
+        },
+      },
+    },
   }
 }
 
+require("telescope").load_extension('repo')
 require('telescope').load_extension('fzf')
 
 vim.cmd("let g:rooter_patterns = ['.git', 'go.mod']")
@@ -290,3 +308,5 @@ vim.api.nvim_set_keymap('', 'f', "<cmd>lua require'hop'.hint_char1({ direction =
 vim.api.nvim_set_keymap('', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", {})
 vim.api.nvim_set_keymap('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", {})
 vim.api.nvim_set_keymap('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>", {})
+
+--g['rooter_cd_cmd'] = 'lcd'

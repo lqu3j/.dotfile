@@ -25,4 +25,6 @@ vim.o.wrap = true
 vim.o.linebreak = true
 vim.o.mouse = ''
 vim.cmd[[colorscheme NeoSolarized]]
+vim.cmd[[au FocusGained,BufEnter * :silent! !]]
 vim.o.guicursor="a:blinkwait5-blinkon5-blinkoff5"
+vim.g.rooter_cd_cmd='lcd'

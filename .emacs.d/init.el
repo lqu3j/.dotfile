@@ -352,7 +352,7 @@
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode)))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
-(setq org-agenda-files (list "~/Dropbox/org/todo.org"))
+(setq org-agenda-files (list "~/notes/todo.org"))
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "IN-PROGRESS(p!)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
@@ -429,7 +429,7 @@
 ;; 保证org-mode table中英文字体对齐
 (defun my/org-mode-font()
   (make-face 'width-font-face)
-  (set-face-attribute 'width-font-face nil :font "Sarasa Mono SC 15")
+  (set-face-attribute 'width-font-face nil :font "Sarasa Mono SC Nerd 15")
   (setq buffer-face-mode-face 'width-font-face)
   (buffer-face-mode))
 
@@ -467,8 +467,8 @@
   (setq blamer-commit-formatter " %s"))
 
 
-(setq org-agenda-files (quote ("~/Dropbox/org/notes.org"
-                               "~/Dropbox/org/work.org")))
+(setq org-agenda-files (quote ("~/notes/notes.org"
+                               "~/notes/work.org")))
 
 
 (add-to-list 'display-buffer-alist
@@ -540,7 +540,7 @@
 (setq org-clock-out-when-done t)
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/Dropbox/org/work.org" "todo list")
+      '(("t" "Todo" entry (file+headline "~/notes/work.org" "todo list")
          "* TODO %?\n  SCHEDULED: %t")))
 
 (global-set-key (kbd "C-c c") #'org-capture)
@@ -567,7 +567,7 @@
 The current time is used if the entry has no timestamp. If FILE
 is nil, refile in the current file."
   (interactive)
-  (let* ((file "~/Dropbox/org/journal.org")
+  (let* ((file "~/notes/journal.org")
          (datetree-date (or (org-entry-get nil "SCHEDULED" t)
                             (org-read-date t nil "now")))
          (date (org-date-to-gregorian datetree-date))
@@ -644,14 +644,14 @@ is nil, refile in the current file."
            (eglot--dbind ((Command) command arguments) command
              (eglot-execute-command server (intern command) arguments))))))))
 
-(defun project-find-go-module (dir)
-  (when-let ((root (locate-dominating-file dir "go.mod")))
-    (cons 'go-module root)))
+;; (defun project-find-go-module (dir)
+;;   (when-let ((root (locate-dominating-file dir "go.mod")))
+;;     (cons 'go-module root)))
 
 (cl-defmethod project-root ((project (head go-module)))
   (cdr project))
 
-(add-hook 'project-find-functions #'project-find-go-module)
+;; (add-hook 'project-find-functions #'project-find-go-module)
 
 (setq-default eglot-workspace-configuration
               '((:gopls .
@@ -746,3 +746,6 @@ is nil, refile in the current file."
 
 
 (setq dired-dwim-target t)
+
+(use-package auto-yasnippet
+  :ensure t)
