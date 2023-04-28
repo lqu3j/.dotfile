@@ -8,23 +8,23 @@ vim.o.smartindent = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.signcolumn = "yes"
-vim.o.backupcopy= "yes"
+vim.o.backupcopy = "yes"
 vim.o.background = "dark"
 vim.o.autoread = true
 vim.o.termguicolors = true
-vim.o.ignorecase = true  -- Case insensitive search
+vim.o.ignorecase = true -- Case insensitive search
 vim.o.smartcase = true -- ... but case sensitive when uc present
 vim.o.wrap = false -- Do not wrap long lines
 vim.o.autowrite = true -- Automatically write a file when leaving a modified buffer
 vim.o.hidden = true -- Allow buffer switching without saving
-vim.o.completeopt = 'menu,menuone,noselect'
+vim.o.completeopt = "menu,menuone,noselect"
 vim.o.updatetime = 100
 vim.o.cursorline = true
-vim.o.cursorlineopt = 'number'
+vim.o.cursorlineopt = "number"
 vim.o.wrap = true
 vim.o.linebreak = true
-vim.o.mouse = ''
-vim.cmd[[colorscheme NeoSolarized]]
-vim.cmd[[au FocusGained,BufEnter * :silent! !]]
-vim.o.guicursor="a:blinkwait5-blinkon5-blinkoff5"
-vim.g.rooter_cd_cmd='lcd'
+vim.o.mouse = ""
+vim.cmd([[colorscheme gruvbox]])
+vim.cmd([[au FocusGained,BufEnter * :silent! !]])
+vim.o.guicursor = "a:blinkwait5-blinkon5-blinkoff5"
+vim.g.rooter_cd_cmd = "lcd"
