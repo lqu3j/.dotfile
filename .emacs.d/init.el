@@ -202,6 +202,7 @@
   :init (doom-modeline-mode 1))
 
 (setq doom-modeline-buffer-file-name-style 'truncate-upto-root)
+(setq doom-modeline-icon nil)
 (setq doom-modeline-buffer-encoding t)
 (setq doom-modeline-before-update-env-hook nil)
 (setq doom-modeline-after-update-env-hook nil)
