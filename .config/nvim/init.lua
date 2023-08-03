@@ -55,7 +55,7 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap(
 	"n",
 	"<C-p>",
-	[[<Cmd>lua require('telescope').extensions.repo.list(require('telescope.themes').get_ivy({}))<CR>]],
+	[[<Cmd>lua require('telescope').extensions.project.project({display_type = 'full'})<CR>]],
 	{ noremap = true, silent = true }
 )
 
@@ -195,7 +195,7 @@ function goimports(wait_ms)
 			end
 		end
 	end
-	vim.lsp.buf.formatting_sync()
+	vim.lsp.buf.format({async = false})
 end
 vim.api.nvim_exec([[ autocmd BufWritePre *.go :silent! lua goimports(1000) ]], false)
 
@@ -256,7 +256,7 @@ require("telescope").setup({
 	},
 	pickers = {
 		find_files = {
-			find_command = { "fd", "-H", "-I" },
+			find_command = { "fd", "-H", "--no-ignore-vcs"},
 		},
 	},
 	extensions = {
@@ -266,26 +266,17 @@ require("telescope").setup({
 			override_file_sorter = true, -- override the file sorter
 			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 		},
-		repo = {
-			list = {
-				fd_opts = {
-					"-I",
-				},
-				search_dirs = {
-					"/home/lx/projects",
-				},
-			},
+		project = {
+            theme = "ivy"
 		},
 	},
 })
 
-require("telescope").load_extension("repo")
+require("telescope").load_extension("project")
 require("telescope").load_extension("fzf")
 
 vim.cmd("let g:rooter_patterns = ['.git', 'go.mod']")
 require("plenary.filetype").add_file("tmpl")
-local parser = require("nvim-treesitter.parsers").filetype_to_parsername
-parser.template = "html" -- the someft filetype will use the python parser and queries.
 
 vim.cmd([[
     autocmd FileType go compiler go
@@ -353,3 +344,16 @@ vim.api.nvim_set_keymap(
 	{}
 )
 
+vim.cmd[[cnoremap <expr> %% getcmdtype( ) == ':' ? expand('%:h').'/' : '%%']]
+-- vim.cmd[[nnoremap mk :silent make %<cr>]]
+function _G.set_terminal_keymaps()
+  local opts = {buffer = 0}
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<alt-h>', [[<Cmd>wincmd h<CR>]], opts)
+  vim.keymap.set('t', '<alt-j>', [[<Cmd>wincmd j<CR>]], opts)
+  vim.keymap.set('t', '<alt-k>', [[<Cmd>wincmd k<CR>]], opts)
+  vim.keymap.set('t', '<alt-l>', [[<Cmd>wincmd l<CR>]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')

@@ -81,9 +81,9 @@
         company-dabbrev-other-buffers nil
         company-require-match 'never
         company-auto-complete nil
-        company-auto-complete-chars nil
-        company-frontends '(company-pseudo-tooltip-frontend  ; always show candidates in overlay tooltip
-							company-echo-metadata-frontend))  ; show selected candidate docs in echo area)
+        company-auto-complete-chars nil)
+        ;; company-frontends '(company-pseudo-tooltip-frontend  ; always show candidates in overlay tooltip
+		;; 					company-echo-metadata-frontend))  ; show selected candidate docs in echo area)
   
   :bind(:map company-active-map
 			 ("C-n" . company-select-next)
@@ -420,12 +420,12 @@
 (setq org-adapt-indentation t)
 
 ;; 禁止bold字体
-(defun my/disable-bold-font()
-  (set-face-bold-p 'bold nil)
-  (mapc
-   (lambda (face)
-     (set-face-attribute face nil :weight 'normal :underline nil))
-   (face-list)))
+;; (defun my/disable-bold-font()
+;;   (set-face-bold-p 'bold nil)
+;;   (mapc
+;;    (lambda (face)
+;;      (set-face-attribute face nil :weight 'normal :underline nil))
+;;    (face-list)))
 
 ;; 保证org-mode table中英文字体对齐
 (defun my/org-mode-font()
@@ -450,8 +450,8 @@
 
 (add-hook 'org-agenda-mode-hook #'my/org-mode-font)
 
-(with-eval-after-load 'dired
-  (my/disable-bold-font))
+;; (with-eval-after-load 'dired
+;;   (my/disable-bold-font))
 
 (use-package blamer
   :ensure t
@@ -676,10 +676,12 @@ is nil, refile in the current file."
   (eglot-ensure)
   (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
   (add-hook 'before-save-hook #'lx/eglot-organize-imports 10 t)
+  (setq go-ts-mode-indent-offset 4)
+  (breadcrumb-local-mode)
   (setq go-test-args "--count=1")
   (setq compile-command "go build"))
 
-(add-hook 'go-mode-hook #'lx/go-mode-hook)
+(add-hook 'go-ts-mode-hook #'lx/go-mode-hook)
 (define-key flymake-mode-map (kbd "C-c d") 'flymake-show-project-diagnostics)
 (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
 
@@ -750,3 +752,37 @@ is nil, refile in the current file."
 
 (use-package auto-yasnippet
   :ensure t)
+
+
+(add-to-list 'load-path "~/.emacs.d/plugins/breadcrumb")
+(require 'breadcrumb)
+
+
+
+
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+
+(setopt treesit-font-lock-level 4)
+
+(setq major-mode-remap-alist
+      '((go-mode . go-ts-mode)))
+
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (json-mode . json-ts-mode)
+   (css-mode . css-ts-mode)
+   (go-mode . go-ts-mode)))

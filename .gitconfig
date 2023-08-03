@@ -8,10 +8,8 @@
 	quotepath = false
 [url "git@git.zx-tech.net:"]
 	insteadOf = https://git.algor.tech/
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[pull]
-	rebase = true
+; [url "git@github.com:"]
+;     insteadOf = https://github.com/
 [init]
 	defaultBranch = master
 [push]
