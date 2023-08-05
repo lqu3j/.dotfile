@@ -531,7 +531,11 @@
   (setq project-switch-commands 'project-find-file)
   )
 
-(setq company-backends '(company-files company-capf company-dabbrev-code))
+
+(setq company-backends
+      '(company-files
+        (company-capf :with company-yasnippet company-dabbrev-code)))
+
 (setq completion-ignore-case t)
 (setq org-clock-persist t)
 (setq org-clock-persist-query-resume nil)
@@ -618,7 +622,9 @@ is nil, refile in the current file."
 
 
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :config
+   (setq eglot-stay-out-of '(company)))
 
 
 (defun eglot-organize-imports ()
@@ -750,15 +756,11 @@ is nil, refile in the current file."
 
 (setq dired-dwim-target t)
 
-(use-package auto-yasnippet
+(use-package yasnippet-snippets
   :ensure t)
-
 
 (add-to-list 'load-path "~/.emacs.d/plugins/breadcrumb")
 (require 'breadcrumb)
-
-
-
 
 (setq treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -786,3 +788,14 @@ is nil, refile in the current file."
    (json-mode . json-ts-mode)
    (css-mode . css-ts-mode)
    (go-mode . go-ts-mode)))
+
+(use-package dimmer
+  :ensure t
+  :config
+  (dimmer-mode))
+
+(pixel-scroll-precision-mode)
+(setq display-line-numbers-width-start t)
+
+(use-package go-tag
+  :load-path "~/.emacs.d/plugins/emacs-go-tag")
