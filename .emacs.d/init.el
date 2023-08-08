@@ -534,7 +534,7 @@
 
 (setq company-backends
       '(company-files
-        (company-capf :with company-yasnippet company-dabbrev-code)))
+        (company-capf :with company-yasnippet)))
 
 (setq completion-ignore-case t)
 (setq org-clock-persist t)
