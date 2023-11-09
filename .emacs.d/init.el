@@ -36,7 +36,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
-(setq auto-save-default nil)
+
 ;; when startup, don't display modeline
 (setq mode-line-format nil)
 (prefer-coding-system 'utf-8)
@@ -224,19 +224,19 @@
 (global-set-key (kbd "M-s") 'swiper)
 (save-place-mode +1)
 
-(defun window-half-height ()
-  (max 1 (/ (1- (window-height (selected-window))) 2)))
+;; (defun window-half-height ()
+;;   (max 1 (/ (1- (window-height (selected-window))) 2)))
 
-(defun scroll-up-half ()
-  (interactive)
-  (scroll-up (window-half-height)))
+;; (defun scroll-up-half ()
+;;   (interactive)
+;;   (scroll-up (window-half-height)))
 
-(defun scroll-down-half ()         
-  (interactive)                    
-  (scroll-down (window-half-height)))
+;; (defun scroll-down-half ()         
+;;   (interactive)                    
+;;   (scroll-down (window-half-height)))
 
-(global-set-key (kbd "C-v") 'scroll-up-half)
-(global-set-key (kbd "M-v") 'scroll-down-half)
+;; (global-set-key (kbd "C-v") 'scroll-up-half)
+;; (global-set-key (kbd "M-v") 'scroll-down-half)
 
 (use-package json-mode
   :ensure t)
@@ -305,7 +305,8 @@
 
 (setq vterm-toggle-fullscreen-p nil)
 
-(global-set-key (kbd "C-`") 'vterm-toggle)
+(global-set-key (kbd "C-t") 'vterm-toggle)
+(define-key vterm-mode-map (kbd "C-t")   #'vterm-toggle)
 
 (setq company-tooltip-align-annotations t)
 
@@ -380,14 +381,6 @@
 
 (use-package go-tag
   :ensure t)
-
-;; (use-package company-posframe
-;;   :ensure t
-;;   :init
-;;   (setq company-posframe-quickhelp-delay nil)
-;;   (setq company-posframe-show-indicator nil)
-;;   (setq company-posframe-show-metadata nil))
-;; (company-posframe-mode 1)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -662,7 +655,7 @@ is nil, refile in the current file."
 
 (setq-default eglot-workspace-configuration
               '((:gopls .
-                        ((matcher . "CaseInsensitive")
+                        ((matcher . "CaseInSensitive")
                          (usePlaceholders . t)
                          (hoverKind . "NoDocumentation")
                          ))))
@@ -772,6 +765,7 @@ is nil, refile in the current file."
      (make "https://github.com/alemuller/tree-sitter-make")
      (markdown "https://github.com/ikatyang/tree-sitter-markdown")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (php "https://github.com/tree-sitter/tree-sitter-php")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 
@@ -794,8 +788,170 @@ is nil, refile in the current file."
   :config
   (dimmer-mode))
 
-(pixel-scroll-precision-mode)
-(setq display-line-numbers-width-start t)
-
 (use-package go-tag
   :load-path "~/.emacs.d/plugins/emacs-go-tag")
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+(add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
+
+
+
+(pixel-scroll-precision-mode 1)
+(setq pixel-scroll-precision-interpolate-page t)
+(defun +pixel-scroll-interpolate-down (&optional lines)
+  (interactive)
+  (if lines
+      (pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
+    (pixel-scroll-interpolate-down)))
+
+(defun +pixel-scroll-interpolate-up (&optional lines)
+  (interactive)
+  (if lines
+      (pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
+  (pixel-scroll-interpolate-up))
+
+(defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
+(defalias 'scroll-down-command '+pixel-scroll-interpolate-up)
+
+
+(setq display-line-numbers-width 5)
+
+
+(defun company-yasnippet/disable-after-dot (fun command &optional arg &rest _ignore)
+  (if (eq command 'prefix)
+      (let ((prefix (funcall fun 'prefix)))
+        (when (and prefix (not
+                           (eq
+                            (char-before (- (point) (length prefix)))
+                            ?.)))
+          prefix))
+    (funcall fun command arg)))
+
+(advice-add #'company-yasnippet :around #'company-yasnippet/disable-after-dot)
+
+
+(defun lx/company-yasnippet-advice (fun command &optional arg &rest _ignore)
+  (if (eq command 'prefix)
+      (let ((prefix (funcall fun command)))
+        (unless (or (not prefix) (eq (char-before (- (point) (length prefix))) ?.)) prefix))
+    (when (and arg (not (get-text-property 0 'yas-annotation-patch arg)))
+      (let* ((name (get-text-property 0 'yas-annotation arg))
+             (snip (format "%s (Snip)" name))
+             (leng (length arg)))
+        (put-text-property 0 leng 'yas-annotation snip arg)
+        (put-text-property 0 leng 'yas-annotation-patch t arg)))
+    (funcall fun command arg)))
+
+(advice-add #'company-yasnippet :around #'lx/company-yasnippet-advice)
+
+
+
+
+(global-set-key (kbd "C-c i") 'string-inflection-cycle)
+
+
+
+(defun bf-pretty-print-xml-region (begin end)
+  "Pretty format XML markup in region. You need to have nxml-mode
+http://www.emacswiki.org/cgi-bin/wiki/NxmlMode installed to do
+this.  The function inserts linebreaks to separate tags that have
+nothing but whitespace between them.  It then indents the markup
+by using nxml's indentation rules."
+  (interactive "r")
+  (save-excursion
+    (nxml-mode)
+    (goto-char begin)
+    (while (search-forward-regexp "\>[ \\t]*\<" nil t) 
+      (backward-char) (insert "\n") (setq end (1+ end)))
+    (indent-region begin end))
+  (message "Ah, much better!"))
+
+
+(use-package apheleia
+  :ensure t)
+
+(use-package forge
+  :ensure t)
+
+(setq magit-refs-margin '(t "%Y-%m-%d %H:%M:%S" magit-log-margin-width t 18))
+(setq magit-log-margin '(t "%Y-%m-%d %H:%M:%S" magit-log-margin-width t 18))
+
+(setq auth-sources '("~/.ssh/authinfo"))
+
+(with-eval-after-load 'forge
+  (add-to-list 'forge-alist
+               '("git.zx-tech.net"
+                 "git.zx-tech.net/api/v1"
+                 "git.zx-tech.net"
+                 forge-gitea-repository)))
+
+
+
+;; we recommend using use-package to organize your init.el
+(use-package codeium
+  :load-path "~/.emacs.d/plugins/codeium.el"
+  ;; if you use straight
+  ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+  ;; otherwise, make sure that the codeium.el file is on load-path
+
+  :init
+  ;; use globally
+  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  ;; or on a hook
+  ;; (add-hook 'go-ts-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+
+  ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+  (add-hook 'python-mode-hook
+      (lambda ()
+          (setq-local completion-at-point-functions
+              (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+  ;; an async company-backend is coming soon!
+
+  ;; codeium-completion-at-point is autoloaded, but you can
+  ;; optionally set a timer, which might speed up things as the
+  ;; codeium local language server takes ~0.2s to start up
+  ;; (add-hook 'emacs-startup-hook
+  ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+
+  ;; :defer t ;; lazy loading, if you want
+  :config
+  (setq use-dialog-box nil) ;; do not use popup boxes
+
+  ;; if you don't want to use customize to save the api-key
+  ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+
+  ;; get codeium status in the modeline
+  (setq codeium-mode-line-enable
+        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+  ;; alternatively for a more extensive mode-line
+  ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+  ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+  (setq codeium-api-enabled
+        (lambda (api)
+          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+  ;; you can also set a config for a single buffer like this:
+  ;; (add-hook 'python-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+  ;; You can overwrite all the codeium configs!
+  ;; for example, we recommend limiting the string sent to codeium for better performance
+  (defun my-codeium/document/text ()
+    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+  ;; if you change the text, you should also change the cursor_offset
+  ;; warning: this is measured by UTF-8 encoded bytes
+  (defun my-codeium/document/cursor_offset ()
+    (codeium-utf8-byte-length
+     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+  (setq codeium/document/text 'my-codeium/document/text)
+  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))

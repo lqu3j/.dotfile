@@ -27,29 +27,34 @@ require("nvim-treesitter.configs").setup({
 vim.cmd([[autocmd VimEnter * highlight clear SignColumn]])
 vim.cmd([[command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!]])
 
-require("telescope.themes").get_ivy({})
 vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>ff",
-	[[<Cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<CR>]],
+	[[<Cmd>lua require('telescope.builtin').find_files()<CR>]],
 	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>fr",
-	[[<Cmd>lua require('telescope.builtin').oldfiles(require('telescope.themes').get_ivy({}))<CR>]],
+	[[<Cmd>lua require('telescope.builtin').oldfiles()<CR>]],
 	{ noremap = true, silent = true }
 )
+-- vim.api.nvim_set_keymap(
+-- 	"n",
+-- 	"<Leader>fg",
+-- 	[[<Cmd>lua require('telescope.builtin').live_grep()<CR>]],
+-- 	{ noremap = true, silent = true }
+-- )
 vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>fg",
-	[[<Cmd>lua require('telescope.builtin').live_grep(require('telescope.themes').get_ivy({}))<CR>]],
+	[[<Cmd>lua require('telescope.builtin').grep_string({shorten_path = true, word_match = "-w", only_sort_text = true, search = '' })<CR>]],
 	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>fb",
-	[[<Cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_ivy({}))<CR>]],
+	[[<Cmd>lua require('telescope.builtin').buffers()<CR>]],
 	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
