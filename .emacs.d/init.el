@@ -67,30 +67,6 @@
   :ensure t
   :bind(("C-=" . er/expand-region)))
 
-(use-package company
-  :ensure t
-  :hook (prog-mode . company-mode)
-  :init
-  (setq company-idle-delay 0.1
-        company-tooltip-idle-delay 0.1
-        company-echo-delay 0
-		company-minimum-prefix-length 2
-		company-tooltip-align-annotations t
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil
-        company-dabbrev-other-buffers nil
-        company-require-match 'never
-        company-auto-complete nil
-        company-auto-complete-chars nil)
-        ;; company-frontends '(company-pseudo-tooltip-frontend  ; always show candidates in overlay tooltip
-		;; 					company-echo-metadata-frontend))  ; show selected candidate docs in echo area)
-  
-  :bind(:map company-active-map
-			 ("C-n" . company-select-next)
-			 ("C-p" . company-select-previous)
-			 ("C-w" . nil))
-  )
-
 (use-package smartparens
   :ensure t
   :config
@@ -308,8 +284,6 @@
 (global-set-key (kbd "C-t") 'vterm-toggle)
 (define-key vterm-mode-map (kbd "C-t")   #'vterm-toggle)
 
-(setq company-tooltip-align-annotations t)
-
 (use-package goto-chg
   :ensure t)
 
@@ -525,10 +499,6 @@
   )
 
 
-(setq company-backends
-      '(company-files
-        (company-capf :with company-yasnippet)))
-
 (setq completion-ignore-case t)
 (setq org-clock-persist t)
 (setq org-clock-persist-query-resume nil)
@@ -605,7 +575,7 @@ is nil, refile in the current file."
 (use-package dracula-theme
   :ensure t)
 
-(load-theme 'doom-gruvbox t)
+(load-theme 'gruvbox t)
 
 (defun counsel-rg-project (dir)
   (interactive (list (project-prompt-project-dir)))
@@ -615,9 +585,10 @@ is nil, refile in the current file."
 
 
 (use-package eglot
-  :ensure t
-  :config
-   (setq eglot-stay-out-of '(company)))
+  :ensure t)
+
+(use-package gruvbox-theme
+  :ensure t)
 
 
 (defun eglot-organize-imports ()
@@ -678,7 +649,8 @@ is nil, refile in the current file."
   (setq go-ts-mode-indent-offset 4)
   (breadcrumb-local-mode)
   (setq go-test-args "--count=1")
-  (setq compile-command "go build"))
+  (setq compile-command "go build")
+  )
 
 (add-hook 'go-ts-mode-hook #'lx/go-mode-hook)
 (define-key flymake-mode-map (kbd "C-c d") 'flymake-show-project-diagnostics)
@@ -822,40 +794,7 @@ is nil, refile in the current file."
 
 (setq display-line-numbers-width 5)
 
-
-(defun company-yasnippet/disable-after-dot (fun command &optional arg &rest _ignore)
-  (if (eq command 'prefix)
-      (let ((prefix (funcall fun 'prefix)))
-        (when (and prefix (not
-                           (eq
-                            (char-before (- (point) (length prefix)))
-                            ?.)))
-          prefix))
-    (funcall fun command arg)))
-
-(advice-add #'company-yasnippet :around #'company-yasnippet/disable-after-dot)
-
-
-(defun lx/company-yasnippet-advice (fun command &optional arg &rest _ignore)
-  (if (eq command 'prefix)
-      (let ((prefix (funcall fun command)))
-        (unless (or (not prefix) (eq (char-before (- (point) (length prefix))) ?.)) prefix))
-    (when (and arg (not (get-text-property 0 'yas-annotation-patch arg)))
-      (let* ((name (get-text-property 0 'yas-annotation arg))
-             (snip (format "%s (Snip)" name))
-             (leng (length arg)))
-        (put-text-property 0 leng 'yas-annotation snip arg)
-        (put-text-property 0 leng 'yas-annotation-patch t arg)))
-    (funcall fun command arg)))
-
-(advice-add #'company-yasnippet :around #'lx/company-yasnippet-advice)
-
-
-
-
 (global-set-key (kbd "C-c i") 'string-inflection-cycle)
-
-
 
 (defun bf-pretty-print-xml-region (begin end)
   "Pretty format XML markup in region. You need to have nxml-mode
@@ -902,17 +841,17 @@ by using nxml's indentation rules."
 
   :init
   ;; use globally
-  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  ;; (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
   ;; or on a hook
   ;; (add-hook 'go-ts-mode-hook
   ;;     (lambda ()
   ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
 
   ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-  (add-hook 'python-mode-hook
-      (lambda ()
-          (setq-local completion-at-point-functions
-              (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+  ;; (add-hook 'python-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local completion-at-point-functions
+  ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
   ;; an async company-backend is coming soon!
 
   ;; codeium-completion-at-point is autoloaded, but you can
@@ -926,7 +865,7 @@ by using nxml's indentation rules."
   (setq use-dialog-box nil) ;; do not use popup boxes
 
   ;; if you don't want to use customize to save the api-key
-  ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+  (setq codeium/metadata/api_key "eefc458b-8672-463b-afb3-3365a679c6b7")
 
   ;; get codeium status in the modeline
   (setq codeium-mode-line-enable
@@ -955,3 +894,86 @@ by using nxml's indentation rules."
      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
   (setq codeium/document/text 'my-codeium/document/text)
   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+
+
+
+
+(use-package corfu
+  :ensure t
+  ;; Optional customizations
+  :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+  ;; be used globally (M-/).  See also the customization variable
+  ;; `global-corfu-modes' to exclude certain modes.
+  :init
+  (global-corfu-mode))
+
+
+;; Enable Corfu completion UI
+;; See the Corfu README for more configuration tips.
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  :config
+  (setq corfu-auto-delay  0))
+
+;; Add extensions
+(use-package cape
+  :ensure t
+  ;; Bind dedicated completion commands
+  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+  :bind (("C-c p p" . completion-at-point) ;; capf
+         ("C-c p t" . complete-tag)        ;; etags
+         ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+         ("C-c p h" . cape-history)
+         ("C-c p f" . cape-file)
+         ("C-c p k" . cape-keyword)
+         ("C-c p s" . cape-elisp-symbol)
+         ("C-c p e" . cape-elisp-block)
+         ("C-c p a" . cape-abbrev)
+         ("C-c p l" . cape-line)
+         ("C-c p w" . cape-dict)
+         ("C-c p :" . cape-emoji)
+         ("C-c p \\" . cape-tex)
+         ("C-c p _" . cape-tex)
+         ("C-c p ^" . cape-tex)
+         ("C-c p &" . cape-sgml)
+         ("C-c p r" . cape-rfc1345))
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+)
+
+(use-package yasnippet-capf
+  :after cape
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
