@@ -12,4 +12,6 @@ export TERM=xterm-256color
 export EDITOR=nvim
 export NALI_DB_IP4=ip2location
 export NALI_DB_IP6=ip2location
+export LIBVIRT_DEFAULT_URI=qemu:///system
+
 

@@ -165,6 +165,7 @@ alias vi="nvim"
 alias gpbd="git push origin --delete"
 alias curl="curl -s --compressed"
 alias ssh="sshwrap"
+alias cgo="~/go/src/bin/go"
 export TERM=xterm-256color
 
 export NVM_DIR="$HOME/.nvm"
@@ -177,3 +178,5 @@ export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 #
 bindkey -r '^T' 
+ulimit -n 4096
+

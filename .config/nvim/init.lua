@@ -4,7 +4,15 @@ require("settings")
 
 vim.o.completeopt = "menuone,noinsert,noselect"
 
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  sync_root_with_cwd = true,
+  respect_buf_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_root = true
+  },
+}
+)
 
 local treesitter = require("nvim-treesitter")
 
@@ -31,6 +39,12 @@ vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>ff",
 	[[<Cmd>lua require('telescope.builtin').find_files()<CR>]],
+	{ noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+	"n",
+	"<Leader>fp",
+	[[<Cmd>lua require('telescope.builtin').git_files()<CR>]],
 	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
@@ -261,7 +275,7 @@ require("telescope").setup({
 	},
 	pickers = {
 		find_files = {
-			find_command = { "fd", "-H", "--no-ignore-vcs"},
+			find_command = { "fd", "--type", "f", "--hidden", "--follow", "--exclude",".git"},
 		},
 	},
 	extensions = {
@@ -362,3 +376,7 @@ end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd [[
+  autocmd FileType qf nnoremap <buffer> q :cclose<CR>
+]]
+

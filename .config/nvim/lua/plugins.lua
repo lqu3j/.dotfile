@@ -7,6 +7,18 @@ return require("packer").startup(function()
 			require("nvim-treesitter.install").update({ with_sync = true })
 		end,
 	})
+    -- Lua
+    use {
+      "ahmedkhalf/project.nvim",
+      config = function()
+        require("project_nvim").setup {
+          -- your configuration comes here
+          -- or leave it empty to use the default settings
+          -- refer to the configuration section below
+        }
+      end
+    }
+
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
@@ -17,7 +29,7 @@ return require("packer").startup(function()
 	use("f-person/git-blame.nvim")
 	use("tpope/vim-surround")
 	use({ "kyazdani42/nvim-tree.lua", requires = "kyazdani42/nvim-web-devicons" })
-	use({ "nvim-telescope/telescope.nvim", tag = "0.1.0", requires = "nvim-lua/plenary.nvim" })
+	use({ "nvim-telescope/telescope.nvim", requires = "nvim-lua/plenary.nvim" })
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 	use("nvim-telescope/telescope-project.nvim")
 	use({ "hoob3rt/lualine.nvim", requires = "kyazdani42/nvim-web-devicons" })

@@ -3,6 +3,7 @@
           #'(lambda ()
               (setq gc-cons-threshold (* 100 1000 1000))))
 (add-hook 'focus-out-hook 'garbage-collect)
+(setq package-install-upgrade-built-in t)
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
@@ -14,7 +15,6 @@
 
 (setq package-archives
       '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-        ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
 
 (package-initialize t)
@@ -282,7 +282,11 @@
 (setq vterm-toggle-fullscreen-p nil)
 
 (global-set-key (kbd "C-t") 'vterm-toggle)
-(define-key vterm-mode-map (kbd "C-t")   #'vterm-toggle)
+(define-key vterm-mode-map (kbd "C-t")   'vterm-toggle)
+(with-eval-after-load 'dired
+   (define-key dired-mode-map (kbd "C-t") 'vterm-toggle)
+  )
+
 
 (use-package goto-chg
   :ensure t)
@@ -575,8 +579,6 @@ is nil, refile in the current file."
 (use-package dracula-theme
   :ensure t)
 
-(load-theme 'gruvbox t)
-
 (defun counsel-rg-project (dir)
   (interactive (list (project-prompt-project-dir)))
   (counsel-rg "" dir)
@@ -589,7 +591,6 @@ is nil, refile in the current file."
 
 (use-package gruvbox-theme
   :ensure t)
-
 
 (defun eglot-organize-imports ()
   "Offer to execute code actions `source.organizeImports'."
@@ -659,9 +660,6 @@ is nil, refile in the current file."
 (use-package markdown-preview-mode
   :ensure t)
 (setq markdown-command "/usr/bin/pandoc")
-
-(setq inhibit-automatic-native-compilation nil)
-
 
 (defun parse-url (url)
   "convert a git remote location as a HTTP URL"
@@ -755,10 +753,10 @@ is nil, refile in the current file."
    (css-mode . css-ts-mode)
    (go-mode . go-ts-mode)))
 
-(use-package dimmer
-  :ensure t
-  :config
-  (dimmer-mode))
+;; (use-package dimmer
+;;   :ensure t
+;;   :config
+;;   (dimmer-mode))
 
 (use-package go-tag
   :load-path "~/.emacs.d/plugins/emacs-go-tag")
@@ -771,8 +769,6 @@ is nil, refile in the current file."
 
 (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
 (add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
-
-
 
 (pixel-scroll-precision-mode 1)
 (setq pixel-scroll-precision-interpolate-page t)
@@ -793,6 +789,7 @@ is nil, refile in the current file."
 
 
 (setq display-line-numbers-width 5)
+(setq display-line-numbers-width-start t)
 
 (global-set-key (kbd "C-c i") 'string-inflection-cycle)
 
@@ -833,67 +830,67 @@ by using nxml's indentation rules."
 
 
 ;; we recommend using use-package to organize your init.el
-(use-package codeium
-  :load-path "~/.emacs.d/plugins/codeium.el"
-  ;; if you use straight
-  ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
-  ;; otherwise, make sure that the codeium.el file is on load-path
-
-  :init
-  ;; use globally
-  ;; (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-  ;; or on a hook
-  ;; (add-hook 'go-ts-mode-hook
-  ;;     (lambda ()
-  ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
-
-  ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-  ;; (add-hook 'python-mode-hook
-  ;;     (lambda ()
-  ;;         (setq-local completion-at-point-functions
-  ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
-  ;; an async company-backend is coming soon!
-
-  ;; codeium-completion-at-point is autoloaded, but you can
-  ;; optionally set a timer, which might speed up things as the
-  ;; codeium local language server takes ~0.2s to start up
-  ;; (add-hook 'emacs-startup-hook
-  ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
-
-  ;; :defer t ;; lazy loading, if you want
-  :config
-  (setq use-dialog-box nil) ;; do not use popup boxes
-
-  ;; if you don't want to use customize to save the api-key
-  (setq codeium/metadata/api_key "eefc458b-8672-463b-afb3-3365a679c6b7")
-
-  ;; get codeium status in the modeline
-  (setq codeium-mode-line-enable
-        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-  ;; alternatively for a more extensive mode-line
-  ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
-
-  ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-  (setq codeium-api-enabled
-        (lambda (api)
-          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-  ;; you can also set a config for a single buffer like this:
-  ;; (add-hook 'python-mode-hook
-  ;;     (lambda ()
-  ;;         (setq-local codeium/editor_options/tab_size 4)))
-
-  ;; You can overwrite all the codeium configs!
-  ;; for example, we recommend limiting the string sent to codeium for better performance
-  (defun my-codeium/document/text ()
-    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-  ;; if you change the text, you should also change the cursor_offset
-  ;; warning: this is measured by UTF-8 encoded bytes
-  (defun my-codeium/document/cursor_offset ()
-    (codeium-utf8-byte-length
-     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-  (setq codeium/document/text 'my-codeium/document/text)
-  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+;; (use-package codeium
+;;   :load-path "~/.emacs.d/plugins/codeium.el"
+;;   ;; if you use straight
+;;   ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+;;   ;; otherwise, make sure that the codeium.el file is on load-path
+;;
+;;   :init
+;;   ;; use globally
+;;   ;; (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+;;   ;; or on a hook
+;;   ;; (add-hook 'go-ts-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+;;
+;;   ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+;;   ;; (add-hook 'python-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local completion-at-point-functions
+;;   ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+;;   ;; an async company-backend is coming soon!
+;;
+;;   ;; codeium-completion-at-point is autoloaded, but you can
+;;   ;; optionally set a timer, which might speed up things as the
+;;   ;; codeium local language server takes ~0.2s to start up
+;;   ;; (add-hook 'emacs-startup-hook
+;;   ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+;;
+;;   ;; :defer t ;; lazy loading, if you want
+;;   :config
+;;   (setq use-dialog-box nil) ;; do not use popup boxes
+;;
+;;   ;; if you don't want to use customize to save the api-key
+;;   (setq codeium/metadata/api_key "eefc458b-8672-463b-afb3-3365a679c6b7")
+;;
+;;   ;; get codeium status in the modeline
+;;   (setq codeium-mode-line-enable
+;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+;;   ;; alternatively for a more extensive mode-line
+;;   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+;;
+;;   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+;;   (setq codeium-api-enabled
+;;         (lambda (api)
+;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+;;   ;; you can also set a config for a single buffer like this:
+;;   ;; (add-hook 'python-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
+;;
+;;   ;; You can overwrite all the codeium configs!
+;;   ;; for example, we recommend limiting the string sent to codeium for better performance
+;;   (defun my-codeium/document/text ()
+;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+;;   ;; if you change the text, you should also change the cursor_offset
+;;   ;; warning: this is measured by UTF-8 encoded bytes
+;;   (defun my-codeium/document/cursor_offset ()
+;;     (codeium-utf8-byte-length
+;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;   (setq codeium/document/text 'my-codeium/document/text)
+;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
 
 
 
@@ -929,8 +926,11 @@ by using nxml's indentation rules."
 (use-package corfu
   :init
   (global-corfu-mode)
+  :custom
+   (corfu-on-exact-match nil)  
   :config
-  (setq corfu-auto-delay  0))
+  (setq corfu-auto-delay  0)
+  )
 
 ;; Add extensions
 (use-package cape
@@ -974,6 +974,46 @@ by using nxml's indentation rules."
 )
 
 (use-package yasnippet-capf
+  :ensure t
   :after cape
   :config
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
+(custom-set-faces
+ '(aw-leading-char-face
+   ((t (:inherit ace-jump-face-foreground :height 1.0)))))
+
+(use-package elfeed
+  :ensure t
+  :config
+  (setq elfeed-feeds 
+	  '(("https://blog.golang.org/feed.atom" golang coding)
+	  ("https://arthurchiao.github.io/feed.xml" blog)
+	  ("https://drewdevault.com/blog/index.xml" blog)
+	  ("https://eli.thegreenplace.net/feeds/all.atom.xml" blog)
+	  ("https://martinheinz.dev/rss" blog)
+	  ("https://lwn.net/headlines/newrss" news linux)
+      ("https://sachachua.com/blog/feed/" blog)
+	  ("https://www.solidot.org/index.rss" news))))
+
+(global-set-key (kbd "C-c w") 'elfeed)
+
+(use-package google-translate
+  :ensure t
+  :init
+  (setq google-translate-translation-directions-alist
+	'(("en" . "zh-CN") ("zh-CN" . "en") ("en" . "de")))
+  :config
+  (require 'google-translate-smooth-ui)
+  :bind
+  (("C-c t" . google-translate-smooth-translate)))
+
+(load-theme 'doom-one t)
+
+(use-package gif-screencast
+  :ensure t)
+
+(global-set-key (kbd "<f9>") 'gif-screencast-start-or-stop)
+
+(use-package org
+  :pin gnu)
