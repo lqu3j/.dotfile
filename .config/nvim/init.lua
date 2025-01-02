@@ -62,7 +62,7 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap(
 	"n",
 	"<Leader>fg",
-	[[<Cmd>lua require('telescope.builtin').grep_string({shorten_path = true, word_match = "-w", only_sort_text = true, search = '' })<CR>]],
+	[[<Cmd>lua require('telescope.builtin').live_grep()<CR>]],
 	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
@@ -111,6 +111,10 @@ end
 -- Setup lspconfig.
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+require("go").setup({
+    auto_lint = false,
+    lint_prompt_style = "vt"
+})
 lsp.gopls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
@@ -127,10 +131,10 @@ lsp.gopls.setup({
 	},
 })
 
-require("lspconfig").tsserver.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
+-- require("lspconfig").tsserver.setup({
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- })
 
 -- require'lspconfig'.vuels.setup{
 --     on_attach = on_attach,
@@ -302,39 +306,6 @@ vim.cmd([[
     autocmd QuickFixCmdPost [^l]* nested cwindow
 ]])
 
-require("go").setup({
-	-- notify: use nvim-notify
-	notify = false,
-	-- auto commands
-	auto_format = false,
-	auto_lint = false,
-	-- linters: revive, errcheck, staticcheck, golangci-lint
-	linter = "revive",
-	-- linter_flags: e.g., {revive = {'-config', '/path/to/config.yml'}}
-	linter_flags = {},
-	-- lint_prompt_style: qf (quickfix), vt (virtual text)
-	lint_prompt_style = "qf",
-	-- formatter: goimports, gofmt, gofumpt
-	formatter = "goimports",
-	-- test flags: -count=1 will disable cache
-	test_flags = { "-v", "-count=1" },
-	test_timeout = "30s",
-	test_env = {},
-	-- show test result with popup window
-	test_popup = true,
-	test_popup_auto_leave = false,
-	test_popup_width = 80,
-	test_popup_height = 10,
-	-- test open
-	test_open_cmd = "edit",
-	-- struct tags
-	tags_name = "json",
-	tags_options = { "json=omitempty" },
-	tags_transform = "snakecase",
-	tags_flags = { "-skip-unexported" },
-	-- quick type
-	quick_type_flags = { "--just-types" },
-})
 
 require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 -- place this in one of your configuration file(s)

@@ -135,12 +135,16 @@
   ;; configuration.  Taken from
   ;; http://whattheemacsd.com/setup-magit.el-01.html#comment-748135498
   ;; and http://irreal.org/blog/?p=2253
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
-  (defadvice magit-quit-window (after magit-restore-screen activate)
-    (jump-to-register :magit-fullscreen))
+  (define-advice magit-status (:around (orig-fun &rest args) magit-fullscreen)
+  "Save the current window configuration and show magit-status in fullscreen."
+  (window-configuration-to-register :magit-fullscreen)
+  (apply orig-fun args)
+  (delete-other-windows))
+
+  (define-advice magit-quit-window (:after (&rest _) magit-restore-screen)
+  "Restore the previous window configuration saved in :magit-fullscreen."
+  (jump-to-register :magit-fullscreen))
+  
   :config
   (setq magit-ediff-dwim-show-on-hunks t))
 
@@ -432,7 +436,7 @@
   (blamer-min-offset 70)
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
-                   :background nil
+                   :background unspecified
                    :height 140
                    :italic t)))
   :config
@@ -476,10 +480,11 @@
 	           (window-height   . 0.33)))
 
 
-(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+
+(define-advice save-buffers-kill-emacs (:around (orig-fun &rest args) no-query-kill-emacs)
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (cl-letf (((symbol-function #'process-list) (lambda ())))
-    ad-do-it))
+    (apply orig-fun args)))
 
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
@@ -1008,7 +1013,6 @@ by using nxml's indentation rules."
   :bind
   (("C-c t" . google-translate-smooth-translate)))
 
-(load-theme 'doom-one t)
 
 (use-package gif-screencast
   :ensure t)
@@ -1017,3 +1021,11 @@ by using nxml's indentation rules."
 
 (use-package org
   :pin gnu)
+
+(use-package ef-themes
+  :ensure t)
+
+(load-theme 'leuven t)
+
+(with-eval-after-load 'dired
+  (set-face-attribute 'dired-directory nil :background unspecified))

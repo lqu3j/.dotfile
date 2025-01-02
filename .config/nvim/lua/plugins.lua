@@ -60,4 +60,16 @@ return require("packer").startup(function()
 	use({ "mhartington/formatter.nvim" })
     use("vim-autoformat/vim-autoformat")
     use{"SmiteshP/nvim-navic",requires = "neovim/nvim-lspconfig"}
+    use {
+    'maxmx03/solarized.nvim',
+    config = function()
+      vim.o.background = 'dark'
+      ---@type solarized
+      local solarized = require('solarized')
+      vim.o.termguicolors = true
+      vim.o.background = 'dark'
+      solarized.setup({})
+      vim.cmd.colorscheme 'solarized'
+    end
+}
 end)
